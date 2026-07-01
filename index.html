@@ -1,1 +1,38 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>برنامج المؤذن</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+  <div class="container">
+
+    <h1>🕌 برنامج المؤذن</h1>
+
+    <h2>القاهرة</h2>
+
+    <h3>🕋 مواقيت الصلاة</h3>
+
+    <p>الفجر: <span id="fajr">--</span></p>
+    <p>الظهر: <span id="dhuhr">--</span></p>
+    <p>العصر: <span id="asr">--</span></p>
+    <p>المغرب: <span id="maghrib">--</span></p>
+    <p>العشاء: <span id="isha">--</span></p>
+
+    <button onclick="loadPrayers()">تحديث</button>
+
+    <hr>
+
+    <h3>🧭 اتجاه القبلة</h3>
+    <p id="qibla">جاري التحميل...</p>
+
+  </div>
+
+  <script src="prayer.js"></script>
+  <script src="script.js"></script>
+  <script src="qibla.js"></script>
+
+</body>
+</html>
