@@ -1,94 +1,105 @@
-const API_BASE = "https://api.aladhan.com/v1/timingsByCity";
+// =========================
+// Prayer Pro - app.js
+// =========================
 
-const prayerElements = {
-  Fajr: document.getElementById("fajr"),
-  Dhuhr: document.getElementById("dhuhr"),
-  Asr: document.getElementById("asr"),
-  Maghrib: document.getElementById("maghrib"),
-  Isha: document.getElementById("isha"),
-};
+// عناصر الصفحة
+const dayName = document.getElementById("dayName");
+const gregorianDate = document.getElementById("gregorianDate");
+const cityName = document.getElementById("cityName");
+const countdown = document.getElementById("countdown");
 
-const nextPrayerElement = document.getElementById("nextPrayer");
-const countdownElement = document.getElementById("countdown");
+// أسماء الأيام
+const days = [
+    "الأحد",
+    "الإثنين",
+    "الثلاثاء",
+    "الأربعاء",
+    "الخميس",
+    "الجمعة",
+    "السبت"
+];
 
-let nextPrayer = null;
-let timer = null;
+// عرض التاريخ
+function updateDate() {
 
-// تحويل 24h -> 12h
-function formatTime(time) {
-  const [h, m] = time.split(":");
-  let hour = +h;
-  const ampm = hour >= 12 ? "م" : "ص";
-  hour = hour % 12 || 12;
-  return `${hour}:${m} ${ampm}`;
+    const now = new Date();
+
+    dayName.textContent = days[now.getDay()];
+
+    gregorianDate.textContent =
+        now.toLocaleDateString("ar-EG", {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        });
+
 }
 
-// تحويل لوقت Date
-function toDate(time) {
-  const [h, m] = time.split(":");
-  const d = new Date();
-  d.setHours(+h, +m, 0, 0);
-  return d;
+updateDate();
+
+
+// الساعة
+function updateClock() {
+
+    const now = new Date();
+
+    countdown.textContent =
+        now.toLocaleTimeString("ar-EG");
+
 }
 
-// تحميل المواقيت (القاهرة)
-async function loadPrayerTimes() {
-  const res = await fetch(
-    `${API_BASE}?city=Cairo&country=EG&method=5`
-  );
+setInterval(updateClock, 1000);
 
-  const data = await res.json();
-  const t = data.data.timings;
+updateClock();
 
-  prayerElements.Fajr.textContent = formatTime(t.Fajr);
-  prayerElements.Dhuhr.textContent = formatTime(t.Dhuhr);
-  prayerElements.Asr.textContent = formatTime(t.Asr);
-  prayerElements.Maghrib.textContent = formatTime(t.Maghrib);
-  prayerElements.Isha.textContent = formatTime(t.Isha);
 
-  setNextPrayer(t);
+// الموقع
+function getLocation() {
+
+    if (!navigator.geolocation) {
+
+        cityName.textContent = "جهازك لا يدعم GPS";
+
+        return;
+    }
+
+    navigator.geolocation.getCurrentPosition(
+
+        success,
+
+        error
+
+    );
+
 }
 
-// الصلاة القادمة
-function setNextPrayer(t) {
-  const prayers = [
-    { name: "الفجر", time: toDate(t.Fajr) },
-    { name: "الظهر", time: toDate(t.Dhuhr) },
-    { name: "العصر", time: toDate(t.Asr) },
-    { name: "المغرب", time: toDate(t.Maghrib) },
-    { name: "العشاء", time: toDate(t.Isha) },
-  ];
+function success(position) {
 
-  const now = new Date();
+    const lat = position.coords.latitude.toFixed(5);
+    const lon = position.coords.longitude.toFixed(5);
 
-  let next = prayers.find(p => p.time > now);
+    cityName.textContent =
+        `📍 ${lat} , ${lon}`;
 
-  if (!next) {
-    next = prayers[0];
-    next.time.setDate(next.time.getDate() + 1);
-  }
-
-  nextPrayer = next;
-
-  nextPrayerElement.textContent = `الصلاة القادمة: ${next.name}`;
-
-  startTimer();
 }
 
-// العد التنازلي
-function startTimer() {
-  if (timer) clearInterval(timer);
+function error() {
 
-  timer = setInterval(() => {
-    const diff = nextPrayer.time - new Date();
+    cityName.textContent =
+        "❌ تم رفض الوصول للموقع";
 
-    const h = Math.floor(diff / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
-
-    countdownElement.textContent =
-      `باقي ${h} ساعة ${m} دقيقة ${s} ثانية`;
-  }, 1000);
 }
 
-loadPrayerTimes();
+getLocation();
+
+
+// أماكن مواقيت الصلاة (مؤقتًا)
+document.getElementById("fajr").textContent = "--:--";
+document.getElementById("sunrise").textContent = "--:--";
+document.getElementById("dhuhr").textContent = "--:--";
+document.getElementById("asr").textContent = "--:--";
+document.getElementById("maghrib").textContent = "--:--";
+document.getElementById("isha").textContent = "--:--";
+
+document.getElementById("nextPrayer").textContent =
+    "جارِ تحميل المواقيت...";
