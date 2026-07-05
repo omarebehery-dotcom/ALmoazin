@@ -127,6 +127,7 @@ body{
     font-size:22px;
 }
 
+/* ⭐ تحسين مهم لعرض الصلوات */
 .times{
     display:grid;
     grid-template-columns:repeat(2,1fr);
@@ -139,19 +140,21 @@ body{
     border-radius:18px;
     padding:18px;
     text-align:center;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    font-size:18px;
 }
 
 .time-card span{
-    display:block;
     font-size:18px;
 }
 
 .time-card strong{
-    display:block;
-    margin-top:8px;
-    font-size:28px;
+    font-size:22px;
 }
 
+/* footer */
 .footer{
     margin-top:auto;
     background:rgba(255,255,255,.12);
@@ -184,5 +187,4 @@ body{
     .next-prayer h1{
         font-size:30px;
     }
-
 }
