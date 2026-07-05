@@ -17,6 +17,7 @@ function cleanTime(time) {
   return time.split(" ")[0]; // يشيل (+03)
 }
 
+
 function formatTime(time24) {
   const [h, m] = time24.split(":");
   let hour = parseInt(h);
