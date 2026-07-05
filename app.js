@@ -1,105 +1,124 @@
-// =========================
-// Prayer Pro - app.js
-// =========================
+const API_BASE = "https://api.aladhan.com/v1/timings";
 
-// عناصر الصفحة
-const dayName = document.getElementById("dayName");
-const gregorianDate = document.getElementById("gregorianDate");
-const cityName = document.getElementById("cityName");
-const countdown = document.getElementById("countdown");
+const prayerElements = {
+  Fajr: document.getElementById("fajr"),
+  Sunrise: document.getElementById("sunrise"),
+  Dhuhr: document.getElementById("dhuhr"),
+  Asr: document.getElementById("asr"),
+  Maghrib: document.getElementById("maghrib"),
+  Isha: document.getElementById("isha"),
+};
 
-// أسماء الأيام
-const days = [
-    "الأحد",
-    "الإثنين",
-    "الثلاثاء",
-    "الأربعاء",
-    "الخميس",
-    "الجمعة",
-    "السبت"
-];
+const cityElement = document.getElementById("city");
+const nextPrayerElement = document.getElementById("nextPrayer");
+const countdownElement = document.getElementById("countdown");
 
-// عرض التاريخ
-function updateDate() {
-
-    const now = new Date();
-
-    dayName.textContent = days[now.getDay()];
-
-    gregorianDate.textContent =
-        now.toLocaleDateString("ar-EG", {
-            year: "numeric",
-            month: "long",
-            day: "numeric"
-        });
-
+function formatTime(time24) {
+  const [h, m] = time24.split(":");
+  let hour = parseInt(h);
+  const ampm = hour >= 12 ? "م" : "ص";
+  hour = hour % 12;
+  if (hour === 0) hour = 12;
+  return `${hour}:${m} ${ampm}`;
 }
 
-updateDate();
-
-
-// الساعة
-function updateClock() {
-
-    const now = new Date();
-
-    countdown.textContent =
-        now.toLocaleTimeString("ar-EG");
-
-}
-
-setInterval(updateClock, 1000);
-
-updateClock();
-
-
-// الموقع
-function getLocation() {
-
-    if (!navigator.geolocation) {
-
-        cityName.textContent = "جهازك لا يدعم GPS";
-
-        return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-
-        success,
-
-        error
-
+async function loadPrayerTimes(lat, lon) {
+  try {
+    const response = await fetch(
+      `${API_BASE}?latitude=${lat}&longitude=${lon}&method=5`
     );
 
+    const data = await response.json();
+
+    const timings = data.data.timings;
+
+    prayerElements.Fajr.textContent = formatTime(timings.Fajr);
+    prayerElements.Sunrise.textContent = formatTime(timings.Sunrise);
+    prayerElements.Dhuhr.textContent = formatTime(timings.Dhuhr);
+    prayerElements.Asr.textContent = formatTime(timings.Asr);
+    prayerElements.Maghrib.textContent = formatTime(timings.Maghrib);
+    prayerElements.Isha.textContent = formatTime(timings.Isha);
+
+    cityElement.textContent =
+      data.data.meta.timezone.replace("_", " ");
+
+    updateNextPrayer(timings);
+
+  } catch (e) {
+    console.log(e);
+  }
 }
 
-function success(position) {
+function updateNextPrayer(timings) {
+  const prayers = [
+    ["الفجر", timings.Fajr],
+    ["الظهر", timings.Dhuhr],
+    ["العصر", timings.Asr],
+    ["المغرب", timings.Maghrib],
+    ["العشاء", timings.Isha],
+  ];
 
-    const lat = position.coords.latitude.toFixed(5);
-    const lon = position.coords.longitude.toFixed(5);
+  const now = new Date();
 
-    cityName.textContent =
-        `📍 ${lat} , ${lon}`;
+  let next = null;
 
+  for (let p of prayers) {
+    const [h, m] = p[1].split(":");
+
+    const d = new Date();
+    d.setHours(h);
+    d.setMinutes(m);
+    d.setSeconds(0);
+
+    if (d > now) {
+      next = {
+        name: p[0],
+        time: d,
+      };
+      break;
+    }
+  }
+
+  if (!next) {
+    const [h, m] = prayers[0][1].split(":");
+    const d = new Date();
+    d.setDate(d.getDate() + 1);
+    d.setHours(h);
+    d.setMinutes(m);
+    next = {
+      name: prayers[0][0],
+      time: d,
+    };
+  }
+
+  nextPrayerElement.textContent = next.name;
+
+  function tick() {
+    const now = new Date();
+
+    const diff = next.time - now;
+
+    const h = Math.floor(diff / 3600000);
+    const m = Math.floor((diff % 3600000) / 60000);
+    const s = Math.floor((diff % 60000) / 1000);
+
+    countdownElement.textContent =
+      `${h} ساعة ${m} دقيقة ${s} ثانية`;
+  }
+
+  tick();
+
+  setInterval(tick, 1000);
 }
 
-function error() {
-
-    cityName.textContent =
-        "❌ تم رفض الوصول للموقع";
-
-}
-
-getLocation();
-
-
-// أماكن مواقيت الصلاة (مؤقتًا)
-document.getElementById("fajr").textContent = "--:--";
-document.getElementById("sunrise").textContent = "--:--";
-document.getElementById("dhuhr").textContent = "--:--";
-document.getElementById("asr").textContent = "--:--";
-document.getElementById("maghrib").textContent = "--:--";
-document.getElementById("isha").textContent = "--:--";
-
-document.getElementById("nextPrayer").textContent =
-    "جارِ تحميل المواقيت...";
+navigator.geolocation.getCurrentPosition(
+  (pos) => {
+    loadPrayerTimes(
+      pos.coords.latitude,
+      pos.coords.longitude
+    );
+  },
+  () => {
+    alert("يرجى السماح بالوصول إلى الموقع.");
+  }
+);
