@@ -1,4 +1,4 @@
-const API_BASE = "https://api.aladhan.com/v1/timings";
+const API_BASE = "https://api.aladhan.com/v1/timingsByCity";
 
 const prayerElements = {
   Fajr: document.getElementById("fajr"),
@@ -12,20 +12,18 @@ const nextPrayerElement = document.getElementById("nextPrayer");
 const countdownElement = document.getElementById("countdown");
 
 let nextPrayer = null;
-let countdownInterval = null;
+let timer = null;
 
-// تحويل الوقت لشكل 12 ساعة
-function formatTime(time24) {
-  const [h, m] = time24.split(":");
+// تحويل 24h -> 12h
+function formatTime(time) {
+  const [h, m] = time.split(":");
   let hour = +h;
-
   const ampm = hour >= 12 ? "م" : "ص";
   hour = hour % 12 || 12;
-
   return `${hour}:${m} ${ampm}`;
 }
 
-// تحويل إلى Date
+// تحويل لوقت Date
 function toDate(time) {
   const [h, m] = time.split(":");
   const d = new Date();
@@ -33,15 +31,15 @@ function toDate(time) {
   return d;
 }
 
-async function loadPrayerTimes(lat, lon) {
+// تحميل المواقيت (القاهرة)
+async function loadPrayerTimes() {
   const res = await fetch(
-    `${API_BASE}?latitude=${lat}&longitude=${lon}&method=5`
+    `${API_BASE}?city=Cairo&country=EG&method=5`
   );
 
   const data = await res.json();
   const t = data.data.timings;
 
-  // عرض كل الصلوات + وقتها
   prayerElements.Fajr.textContent = formatTime(t.Fajr);
   prayerElements.Dhuhr.textContent = formatTime(t.Dhuhr);
   prayerElements.Asr.textContent = formatTime(t.Asr);
@@ -51,7 +49,7 @@ async function loadPrayerTimes(lat, lon) {
   setNextPrayer(t);
 }
 
-// تحديد الصلاة القادمة
+// الصلاة القادمة
 function setNextPrayer(t) {
   const prayers = [
     { name: "الفجر", time: toDate(t.Fajr) },
@@ -74,16 +72,14 @@ function setNextPrayer(t) {
 
   nextPrayerElement.textContent = `الصلاة القادمة: ${next.name}`;
 
-  startCountdown();
+  startTimer();
 }
 
 // العد التنازلي
-function startCountdown() {
-  if (countdownInterval) clearInterval(countdownInterval);
+function startTimer() {
+  if (timer) clearInterval(timer);
 
-  countdownInterval = setInterval(() => {
-    if (!nextPrayer) return;
-
+  timer = setInterval(() => {
     const diff = nextPrayer.time - new Date();
 
     const h = Math.floor(diff / 3600000);
@@ -95,12 +91,4 @@ function startCountdown() {
   }, 1000);
 }
 
-// تشغيل الموقع
-navigator.geolocation.getCurrentPosition(
-  (pos) => {
-    loadPrayerTimes(pos.coords.latitude, pos.coords.longitude);
-  },
-  () => {
-    alert("فعّل الموقع عشان نجيب مواقيت الصلاة");
-  }
-);
+loadPrayerTimes();
