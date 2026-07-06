@@ -391,3 +391,47 @@ function resetTasbih() {
   tasbihCount = 0;
   counter.innerText = tasbihCount;
 }
+// =========================
+// القرآن الكريم
+// =========================
+
+function openQuran() {
+    document.getElementById("quranModal").style.display = "block";
+    loadQuran();
+}
+
+function closeQuran() {
+    document.getElementById("quranModal").style.display = "none";
+}
+
+async function loadQuran() {
+
+    const list = document.getElementById("surahList");
+
+    list.innerHTML = "جاري تحميل السور...";
+
+    try {
+
+        const response = await fetch("https://api.alquran.cloud/v1/surah");
+        const data = await response.json();
+
+        list.innerHTML = "";
+
+        data.data.forEach((surah) => {
+
+            list.innerHTML += `
+                <div style="padding:10px;border-bottom:1px solid #ddd;cursor:pointer">
+                    <strong>${surah.number} - ${surah.name}</strong><br>
+                    عدد الآيات: ${surah.numberOfAyahs}
+                </div>
+            `;
+
+        });
+
+    } catch {
+
+        list.innerHTML = ".";
+
+    }
+
+}
