@@ -2,97 +2,122 @@
 <html lang="ar" dir="rtl">
 
 <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>Prayer Pro</title>
 
     <link rel="stylesheet" href="style.css">
 
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-
 </head>
 
 <body>
 
-    <div class="container">
+<div class="container">
 
-        <!-- Header -->
-        <header class="header">
-            <button class="icon-btn" id="menuBtn">☰</button>
-            <h1 class="logo">🕌 Prayer Pro</h1>
-            <button class="icon-btn" id="settingsBtn">⚙️</button>
-        </header>
+    <!-- Header -->
+    <header class="header">
+        <button class="icon-btn" id="menuBtn">☰</button>
+        <h1 class="logo">🕌 Prayer Pro</h1>
+        <button class="icon-btn" id="settingsBtn">⚙️</button>
+    </header>
 
-        <!-- Date -->
-        <section class="date-card">
-            <h2 id="dayName">اليوم</h2>
-            <p id="gregorianDate">00 / 00 / 0000</p>
-            <p id="hijriDate">التاريخ الهجري</p>
-        </section>
+    <!-- التاريخ -->
+    <section class="date-card">
+        <h2 id="dayName">اليوم</h2>
 
-        <!-- Compass -->
-        <section class="compass-section">
-            <div class="compass">
-                <div class="compass-ring"></div>
-                <div id="needle"></div>
-                <div class="center-dot"></div>
-            </div>
-            <h3 id="qiblaDirection">اتجاه القبلة</h3>
-        </section>
+        <p id="gregorianDate">
+            جارٍ التحميل...
+        </p>
 
-        <!-- Next Prayer -->
-        <section class="next-prayer">
-            <h2>الصلاة القادمة</h2>
-            <h1 id="nextPrayer">---</h1>
-            <h2 id="countdown">00:00:00</h2>
-        </section>
+        <p id="hijriDate">
+            جارٍ التحميل...
+        </p>
+    </section>
 
-        <!-- Prayer Times -->
-        <section class="times">
+    <!-- البوصلة -->
+    <section class="compass-section">
 
-            <div class="time-card">
-                <span>الفجر</span>
-                <strong id="fajr">--:--</strong>
-            </div>
+        <div class="compass">
 
-            <div class="time-card">
-                <span>الشروق</span>
-                <strong id="sunrise">--:--</strong>
-            </div>
+            <div class="compass-ring"></div>
 
-            <div class="time-card">
-                <span>الظهر</span>
-                <strong id="dhuhr">--:--</strong>
-            </div>
+            <div id="needle"></div>
 
-            <div class="time-card">
-                <span>العصر</span>
-                <strong id="asr">--:--</strong>
-            </div>
+            <div class="center-dot"></div>
 
-            <div class="time-card">
-                <span>المغرب</span>
-                <strong id="maghrib">--:--</strong>
-            </div>
+        </div>
 
-            <div class="time-card">
-                <span>العشاء</span>
-                <strong id="isha">--:--</strong>
-            </div>
+        <h3 id="qiblaDirection">
+            اتجاه القبلة
+        </h3>
 
-        </section>
+    </section>
 
-        <!-- Location -->
-        <footer class="footer">
-            <p id="cityName">📍 جاري تحديد الموقع...</p>
-        </footer>
+    <!-- الصلاة القادمة -->
+    <section class="next-prayer">
 
-    </div>
+        <h2>الصلاة القادمة</h2>
 
-    <script src="app.js"></script>
+        <h1 id="nextPrayer">
+            جارٍ التحميل...
+        </h1>
+
+        <h2 id="countdown">
+            00:00:00
+        </h2>
+
+    </section>
+
+    <!-- مواقيت الصلاة -->
+
+    <section class="times">
+
+        <div class="time-card">
+            <span>الفجر</span>
+            <strong id="fajr">--:--</strong>
+        </div>
+
+        <div class="time-card">
+            <span>الشروق</span>
+            <strong id="sunrise">--:--</strong>
+        </div>
+
+        <div class="time-card">
+            <span>الظهر</span>
+            <strong id="dhuhr">--:--</strong>
+        </div>
+
+        <div class="time-card">
+            <span>العصر</span>
+            <strong id="asr">--:--</strong>
+        </div>
+
+        <div class="time-card">
+            <span>المغرب</span>
+            <strong id="maghrib">--:--</strong>
+        </div>
+
+        <div class="time-card">
+            <span>العشاء</span>
+            <strong id="isha">--:--</strong>
+        </div>
+
+    </section>
+
+    <!-- الموقع -->
+
+    <footer class="footer">
+
+        <p id="cityName">
+            📍 جاري تحديد الموقع...
+        </p>
+
+    </footer>
+
+</div>
+
+<script src="app.js"></script>
 
 </body>
 
