@@ -1,1 +1,119 @@
+/* ===========================
+   Prayer Pro - Azkar.css
+=========================== */
 
+#azkarMenu{
+    position:fixed;
+    top:0;
+    right:-340px;
+    width:320px;
+    height:100%;
+    background:#0b5d46;
+    transition:0.35s;
+    z-index:9999;
+    overflow-y:auto;
+    box-shadow:-6px 0 20px rgba(0,0,0,.35);
+    font-family:'Cairo',sans-serif;
+}
+
+.menu-content{
+    padding:20px;
+}
+
+.menu-content h2{
+    color:#fff;
+    text-align:center;
+    margin-bottom:25px;
+    font-size:28px;
+}
+
+.azkar-btn{
+    width:100%;
+    padding:16px;
+    margin-bottom:14px;
+    border:none;
+    border-radius:15px;
+    background:#1fb77b;
+    color:#fff;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.azkar-btn:hover{
+    background:#24d48e;
+    transform:scale(1.03);
+}
+
+.close-btn{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:15px;
+    background:#e53935;
+    color:#fff;
+    font-size:18px;
+    font-weight:bold;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.close-btn:hover{
+    background:#ff4d4d;
+}
+
+.azkar-page{
+    background:#0b5d46;
+    min-height:100vh;
+    padding:20px;
+}
+
+.azkar-title{
+    color:white;
+    text-align:center;
+    font-size:30px;
+    margin-bottom:25px;
+}
+
+.zekr-card{
+    background:white;
+    color:#222;
+    padding:22px;
+    margin-bottom:18px;
+    border-radius:18px;
+    font-size:21px;
+    line-height:2;
+    box-shadow:0 5px 15px rgba(0,0,0,.15);
+}
+
+.back-btn{
+    width:100%;
+    padding:16px;
+    border:none;
+    border-radius:15px;
+    background:#ffffff;
+    color:#0b5d46;
+    font-size:20px;
+    font-weight:bold;
+    cursor:pointer;
+    margin-bottom:20px;
+    transition:.3s;
+}
+
+.back-btn:hover{
+    background:#eeeeee;
+}
+
+::-webkit-scrollbar{
+    width:8px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:#22c98d;
+    border-radius:10px;
+}
+
+::-webkit-scrollbar-track{
+    background:#0b5d46;
+}
