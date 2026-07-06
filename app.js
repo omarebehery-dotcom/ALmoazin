@@ -5,7 +5,12 @@
 // عناصر الصفحة
 const dayName = document.getElementById("dayName");
 const gregorianDate = document.getElementById("gregorianDate");
-const cityName = document.getElementById("cityName");
+const hijriDate = document.getElementById("hijriDate");
+
+const cityName =
+  document.getElementById("cityName") ||
+  document.getElementById("city");
+
 const countdown = document.getElementById("countdown");
 
 const fajr = document.getElementById("fajr");
@@ -14,13 +19,17 @@ const dhuhr = document.getElementById("dhuhr");
 const asr = document.getElementById("asr");
 const maghrib = document.getElementById("maghrib");
 const isha = document.getElementById("isha");
-const nextPrayer = document.getElementById("nextPrayer");
+
+const nextPrayer =
+  document.getElementById("nextPrayer");
 
 // API
-const API = "https://api.aladhan.com/v1/timingsByCity";
+const API =
+  "https://api.aladhan.com/v1/timings";
 
+// متغيرات
 let nextTime = null;
-let timer;
+let timer = null;
 
 // الأيام
 const days = [
@@ -33,59 +42,90 @@ const days = [
   "السبت"
 ];
 
-// التاريخ
+// تحديث التاريخ
 function updateDate() {
+
   const now = new Date();
 
-  dayName.textContent = days[now.getDay()];
+  dayName.textContent =
+    days[now.getDay()];
 
-  gregorianDate.textContent = now.toLocaleDateString("ar-EG", {
-    year: "numeric",
-    month: "long",
-    day: "numeric"
-  });
+  gregorianDate.textContent =
+    now.toLocaleDateString("ar-EG", {
+      year: "numeric",
+      month: "long",
+      day: "numeric"
+    });
+
 }
 
 updateDate();
 
-// الساعة
-function updateClock() {
-  const now = new Date();
-  countdown.textContent = now.toLocaleTimeString("ar-EG");
-}
-
-setInterval(updateClock, 1000);
-updateClock();
-
-
-// تحويل وقت
-function toDate(time) {
-  const [h, m] = time.split(":");
-  const d = new Date();
-  d.setHours(+h, +m, 0, 0);
-  return d;
-}
-
-// تنسيق وقت
+// تحويل الوقت إلى 12 ساعة
 function format(time) {
-  const [h, m] = time.split(":");
-  let hour = +h;
-  const ampm = hour >= 12 ? "م" : "ص";
-  hour = hour % 12 || 12;
-  return `${hour}:${m} ${ampm}`;
+
+  const clean =
+    time.split(" ")[0];
+
+  const parts =
+    clean.split(":");
+
+  let hour =
+    parseInt(parts[0]);
+
+  const minute =
+    parts[1];
+
+  const ampm =
+    hour >= 12 ? "م" : "ص";
+
+  hour =
+    hour % 12;
+
+  if (hour === 0)
+    hour = 12;
+
+  return `${hour}:${minute} ${ampm}`;
+
 }
 
+// تحويل النص إلى Date
+function toDate(time) {
 
+  const clean =
+    time.split(" ")[0];
+
+  const [h, m] =
+    clean.split(":");
+
+  const d = new Date();
+
+  d.setHours(
+    parseInt(h),
+    parseInt(m),
+    0,
+    0
+  );
+
+  return d;
+
+}
 // جلب مواقيت الصلاة
 async function loadPrayers(lat, lon) {
+
   try {
-    const res = await fetch(
+
+    const response = await fetch(
       `${API}?latitude=${lat}&longitude=${lon}&method=5`
     );
 
-    const data = await res.json();
-    const t = data.data.timings;
+    const result = await response.json();
 
+    const data = result.data;
+
+    const t = data.timings;
+
+    // عرض المواقيت
     fajr.textContent = format(t.Fajr);
     sunrise.textContent = format(t.Sunrise);
     dhuhr.textContent = format(t.Dhuhr);
@@ -93,85 +133,238 @@ async function loadPrayers(lat, lon) {
     maghrib.textContent = format(t.Maghrib);
     isha.textContent = format(t.Isha);
 
-    cityName.textContent = `📍 موقعك الحالي`;
+    // المدينة
+    if (cityName) {
 
+      cityName.textContent =
+        "📍 القاهرة - مصر";
+
+    }
+
+    // التاريخ الهجري
+    if (hijriDate) {
+
+      hijriDate.textContent =
+        `${data.date.hijri.day} ${data.date.hijri.month.ar} ${data.date.hijri.year}`;
+
+    }
+
+    // التاريخ الميلادي
+    gregorianDate.textContent =
+      data.date.gregorian.date;
+
+    // اليوم
+    dayName.textContent =
+      data.date.gregorian.weekday.ar;
+
+    // حساب الصلاة القادمة
     setNextPrayer(t);
 
-  } catch (e) {
-    console.log(e);
-    nextPrayer.textContent = "فشل تحميل المواقيت";
   }
+
+  catch (error) {
+
+    console.error(error);
+
+    if (cityName) {
+
+      cityName.textContent =
+        "تعذر تحميل البيانات";
+
+    }
+
+  }
+
 }
 
-
-// الصلاة القادمة
+// حساب الصلاة القادمة
 function setNextPrayer(t) {
+
   const prayers = [
+
     ["الفجر", t.Fajr],
+
     ["الظهر", t.Dhuhr],
+
     ["العصر", t.Asr],
+
     ["المغرب", t.Maghrib],
+
     ["العشاء", t.Isha]
+
   ];
 
   const now = new Date();
 
   let next = null;
 
-  for (let p of prayers) {
-    const d = toDate(p[1]);
-    if (d > now) {
-      next = { name: p[0], time: d };
+  for (let prayer of prayers) {
+
+    const prayerTime = toDate(prayer[1]);
+
+    if (prayerTime > now) {
+
+      next = {
+
+        name: prayer[0],
+
+        time: prayerTime
+
+      };
+
       break;
+
     }
+
   }
 
+  // إذا انتهت جميع الصلوات
   if (!next) {
-    next = { name: "الفجر", time: toDate(prayers[0][1]) };
-    next.time.setDate(next.time.getDate() + 1);
+
+    const fajrTomorrow = toDate(prayers[0][1]);
+
+    fajrTomorrow.setDate(
+
+      fajrTomorrow.getDate() + 1
+
+    );
+
+    next = {
+
+      name: prayers[0][0],
+
+      time: fajrTomorrow
+
+    };
+
   }
 
   nextTime = next.time;
 
-  nextPrayer.textContent = `الصلاة القادمة: ${next.name}`;
+  nextPrayer.textContent = next.name;
 
-  startTimer();
+  startCountdown();
+
 }
 
+// تشغيل العداد
+function startCountdown() {
 
-// عداد الصلاة القادمة
-function startTimer() {
-  if (timer) clearInterval(timer);
+  if (timer)
 
-  timer = setInterval(() => {
-    const diff = nextTime - new Date();
+    clearInterval(timer);
 
-    const h = Math.floor(diff / 3600000);
-    const m = Math.floor((diff % 3600000) / 60000);
-    const s = Math.floor((diff % 60000) / 1000);
+  function update() {
+
+    const now = new Date();
+
+    const diff = nextTime - now;
+
+    if (diff <= 0) {
+
+      clearInterval(timer);
+
+      getLocation();
+
+      return;
+
+    }
+
+    const hours = Math.floor(
+
+      diff / 3600000
+
+    );
+
+    const minutes = Math.floor(
+
+      (diff % 3600000) / 60000
+
+    );
+
+    const seconds = Math.floor(
+
+      (diff % 60000) / 1000
+
+    );
 
     countdown.textContent =
-      `باقي ${h} ساعة ${m} دقيقة ${s} ثانية`;
-  }, 1000);
+
+      `${hours.toString().padStart(2, "0")}:${minutes
+        .toString()
+        .padStart(2, "0")}:${seconds
+        .toString()
+        .padStart(2, "0")}`;
+
+  }
+
+  update();
+
+  timer = setInterval(update, 1000);
+
 }
-
-
-// GPS
+// الحصول على الموقع
 function getLocation() {
+
   if (!navigator.geolocation) {
-    cityName.textContent = "جهازك لا يدعم GPS";
+
+    if (cityName) {
+
+      cityName.textContent =
+        "📍 القاهرة - مصر";
+
+    }
+
+    loadPrayers(30.0444, 31.2357);
+
     return;
+
   }
 
   navigator.geolocation.getCurrentPosition(
-    (pos) => {
-      loadPrayers(pos.coords.latitude, pos.coords.longitude);
+
+    (position) => {
+
+      const lat = position.coords.latitude;
+
+      const lon = position.coords.longitude;
+
+      loadPrayers(lat, lon);
+
     },
+
     () => {
-      cityName.textContent 
-      loadPrayers(30.0444, 31.2357); // القاهرة احتياطي
+
+      if (cityName) {
+
+        cityName.textContent =
+          "📍 القاهرة - مصر";
+
+      }
+
+      // موقع احتياطي: القاهرة
+      loadPrayers(30.0444, 31.2357);
+
+    },
+
+    {
+      enableHighAccuracy: true,
+      timeout: 10000,
+      maximumAge: 0
     }
+
   );
+
 }
 
-getLocation();
+// تحديث التاريخ كل دقيقة
+setInterval(updateDate, 60000);
+
+// تشغيل التطبيق
+window.addEventListener("load", () => {
+
+  updateDate();
+
+  getLocation();
+
+});
