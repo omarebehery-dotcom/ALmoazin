@@ -368,3 +368,26 @@ window.addEventListener("load", () => {
   getLocation();
 
 });
+//
+// =========================
+// 📿 Tasbih Feature
+// =========================
+
+let tasbihCount = 0;
+
+// لازم نتأكد إن العنصر موجود
+function increaseTasbih() {
+  const counter = document.getElementById("counter");
+  if (!counter) return;
+
+  tasbihCount++;
+  counter.innerText = tasbihCount;
+}
+
+function resetTasbih() {
+  const counter = document.getElementById("counter");
+  if (!counter) return;
+
+  tasbihCount = 0;
+  counter.innerText = tasbihCount;
+}
