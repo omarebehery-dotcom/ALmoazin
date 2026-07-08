@@ -23,11 +23,11 @@
 <div class="container">
 
 
-<!-- الهيدر -->
+<!-- Header -->
 
 <header class="header">
 
-<button class="icon-btn" onclick="openMenu()">
+<button class="icon-btn" id="menuBtn" onclick="openMenu()">
 ☰
 </button>
 
@@ -41,6 +41,7 @@
 ⚙️
 </button>
 
+
 </header>
 
 
@@ -49,31 +50,25 @@
 
 <div id="menu" class="menu">
 
-
 <button onclick="openAzkar()">
 🌅 أذكار الصباح
 </button>
-
 
 <button onclick="openAzkar()">
 🌙 أذكار المساء
 </button>
 
-
 <button onclick="openAzkar()">
 😴 أذكار النوم
 </button>
-
 
 <button onclick="openAzkar()">
 🤲 أذكار بعد الصلاة
 </button>
 
-
 <button onclick="openQuran()">
 📖 القرآن الكريم
 </button>
-
 
 </div>
 
@@ -119,7 +114,6 @@
 
 <div class="center-dot"></div>
 
-
 </div>
 
 
@@ -134,10 +128,10 @@
 
 
 
-<!-- السبحة -->
+
+<!-- السبحة الإلكترونية -->
 
 <section class="tasbih-section">
-
 
 <h2>
 📿 السبحة الإلكترونية
@@ -150,7 +144,6 @@
 
 
 <div class="tasbih-buttons">
-
 
 <button onclick="increaseTasbih()">
 + تسبيح
@@ -208,9 +201,7 @@
 
 <div class="time-card">
 
-<span>
-الفجر
-</span>
+<span>الفجر</span>
 
 <strong id="fajr">
 --:--
@@ -222,9 +213,7 @@
 
 <div class="time-card">
 
-<span>
-الشروق
-</span>
+<span>الشروق</span>
 
 <strong id="sunrise">
 --:--
@@ -236,9 +225,7 @@
 
 <div class="time-card">
 
-<span>
-الظهر
-</span>
+<span>الظهر</span>
 
 <strong id="dhuhr">
 --:--
@@ -250,9 +237,7 @@
 
 <div class="time-card">
 
-<span>
-العصر
-</span>
+<span>العصر</span>
 
 <strong id="asr">
 --:--
@@ -264,9 +249,7 @@
 
 <div class="time-card">
 
-<span>
-المغرب
-</span>
+<span>المغرب</span>
 
 <strong id="maghrib">
 --:--
@@ -278,16 +261,13 @@
 
 <div class="time-card">
 
-<span>
-العشاء
-</span>
+<span>العشاء</span>
 
 <strong id="isha">
 --:--
 </strong>
 
 </div>
-
 
 
 </section>
@@ -308,6 +288,7 @@
 
 
 </div>
+
 
 
 
@@ -336,7 +317,6 @@
 <div id="surahList">
 جاري تحميل السور...
 </div>
-
 
 
 </div>
