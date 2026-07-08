@@ -8,11 +8,12 @@
 
 <title>Prayer Pro</title>
 
-<link rel="stylesheet" href="style.css?v=2">
-<link rel="stylesheet" href="quran.css?v=2">
-<link rel="stylesheet" href="azkar.css?v=2">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="quran.css">
 
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="azkar.css">
 
 </head>
 
@@ -23,9 +24,11 @@
 <div class="container">
 
 
+<!-- Header -->
+
 <header class="header">
 
-<button class="icon-btn" id="menuBtn" onclick="openMenu()">
+<button class="icon-btn" id="menuBtn">
 ☰
 </button>
 
@@ -39,42 +42,13 @@
 ⚙️
 </button>
 
-
 </header>
 
 
 
-<div id="menu" class="menu">
-
-<button onclick="openAzkar()">
-🌅 أذكار الصباح
-</button>
-
-<button onclick="openAzkar()">
-🌙 أذكار المساء
-</button>
-
-<button onclick="openAzkar()">
-😴 أذكار النوم
-</button>
-
-<button onclick="openAzkar()">
-🤲 أذكار بعد الصلاة
-</button>
-
-<button onclick="openQuran()">
-📖 القرآن الكريم
-</button>
-
-<button onclick="closeMenu()">
-إغلاق
-</button>
-
-</div>
 
 
-
-
+<!-- التاريخ -->
 
 <section class="date-card">
 
@@ -99,6 +73,8 @@
 
 
 
+<!-- البوصلة -->
+
 <section class="compass-section">
 
 
@@ -109,6 +85,7 @@
 <div id="needle"></div>
 
 <div class="center-dot"></div>
+
 
 </div>
 
@@ -124,8 +101,10 @@
 
 
 
+<!-- 📿 السبحة الإلكترونية -->
 
 <section class="tasbih-section">
+
 
 <h2>
 📿 السبحة الإلكترونية
@@ -139,6 +118,7 @@
 
 <div class="tasbih-buttons">
 
+
 <button onclick="increaseTasbih()">
 + تسبيح
 </button>
@@ -151,13 +131,25 @@
 
 </div>
 
+
+<section class="quran-section">
+
+<button onclick="openQuran()" class="quran-btn">
+
+📖 القرآن الكريم
+
+</button>
+
+</section>
+
+
 </section>
 
 
 
 
 
-
+<!-- الصلاة القادمة -->
 
 <section class="next-prayer">
 
@@ -183,14 +175,16 @@
 
 
 
-
+<!-- مواقيت الصلاة -->
 
 <section class="times">
 
 
 <div class="time-card">
 
-<span>الفجر</span>
+<span>
+الفجر
+</span>
 
 <strong id="fajr">
 --:--
@@ -199,10 +193,11 @@
 </div>
 
 
-
 <div class="time-card">
 
-<span>الشروق</span>
+<span>
+الشروق
+</span>
 
 <strong id="sunrise">
 --:--
@@ -211,10 +206,11 @@
 </div>
 
 
-
 <div class="time-card">
 
-<span>الظهر</span>
+<span>
+الظهر
+</span>
 
 <strong id="dhuhr">
 --:--
@@ -223,10 +219,11 @@
 </div>
 
 
-
 <div class="time-card">
 
-<span>العصر</span>
+<span>
+العصر
+</span>
 
 <strong id="asr">
 --:--
@@ -235,10 +232,11 @@
 </div>
 
 
-
 <div class="time-card">
 
-<span>المغرب</span>
+<span>
+المغرب
+</span>
 
 <strong id="maghrib">
 --:--
@@ -247,10 +245,11 @@
 </div>
 
 
-
 <div class="time-card">
 
-<span>العشاء</span>
+<span>
+العشاء
+</span>
 
 <strong id="isha">
 --:--
@@ -265,11 +264,15 @@
 
 
 
+<!-- الموقع -->
 
 <footer class="footer">
 
+
 <p id="cityName">
+
 📍 جاري تحديد الموقع...
+
 </p>
 
 
@@ -282,8 +285,7 @@
 
 
 
-
-
+<!-- نافذة القرآن الكريم -->
 
 <div id="quranModal" class="quran-modal">
 
@@ -292,7 +294,52 @@
 
 
 <span class="close" onclick="closeQuran()">
+
 ✖
+
+</span>
+
+
+<div id="surahList">
+
+جاري تحميل السور...
+
+</div>
+
+
+</div>
+
+
+</div>
+
+
+
+
+
+<script src="app.js"></script>
+
+<script src="azkar.js"></script>
+
+<script src="qibla.js"></script>
+
+<script src="settings.js"></script>
+
+
+
+
+
+<!-- نافذة القرآن الكريم -->
+
+<div id="quranModal" class="quran-modal">
+
+
+<div class="quran-content">
+
+
+<span class="close" onclick="closeQuran()">
+
+✖
+
 </span>
 
 
@@ -302,9 +349,8 @@
 
 
 <div id="surahList">
+
 جاري تحميل السور...
-</div>
-
 
 </div>
 
@@ -312,6 +358,7 @@
 </div>
 
 
+</div>
 
 
 
