@@ -5,93 +5,59 @@
 const quranModal = document.getElementById("quranModal");
 const surahList = document.getElementById("surahList");
 
-// فتح نافذة القرآن
+// فتح القرآن
 function openQuran() {
     quranModal.style.display = "flex";
     loadSurahs();
 }
 
-// غلق النافذة
+// غلق القرآن
 function closeQuran() {
     quranModal.style.display = "none";
 }
 
-// تحميل جميع السور
-async function loadSurahs() {
+// تحميل قائمة السور
+function loadSurahs() {
 
-    surahList.innerHTML = "<h3 style='text-align:center'>جاري تحميل السور...</h3>";
+    let html = "";
 
-    try {
+    for (let i = 1; i <= 114; i++) {
 
-        const res = await fetch("https://api.alquran.cloud/v1/surah");
-
-        const data = await res.json();
-
-        surahList.innerHTML = "";
-
-        data.data.forEach((surah) => {
-
-            const div = document.createElement("div");
-
-            div.className = "surah-item";
-
-            div.innerHTML = `
-                <span>${surah.number}</span>
-                <strong>${surah.name}</strong>
-                <small>${surah.numberOfAyahs} آية</small>
-            `;
-
-            div.onclick = () => openSurah(surah.number);
-
-            surahList.appendChild(div);
-
-        });
-
-    } catch (e) {
-
-        surahList.innerHTML =
-        "<h3 style='text-align:center'>❌ تعذر تحميل السور</h3>";
+        html += `
+        <div class="surah-item" onclick="openSurah(${i})">
+            <span>${i}</span>
+            <strong>سورة ${i}</strong>
+        </div>
+        `;
 
     }
 
+    surahList.innerHTML = html;
 }
 
 // فتح سورة
 async function openSurah(number) {
 
-    surahList.innerHTML =
-    "<h3 style='text-align:center'>جاري تحميل السورة...</h3>";
-
     try {
 
-        const res = await fetch(
-            `https://api.alquran.cloud/v1/surah/${number}`
-        );
-
-        const data = await res.json();
+        const response = await fetch(`surah/surah_${number}.json`);
+        const surah = await response.json();
 
         let html = `
         <button class="back-btn" onclick="loadSurahs()">
-        ⬅ رجوع
+            ⬅ رجوع
         </button>
 
-        <h2 style="text-align:center">
-        ${data.data.name}
-        </h2>
+        <h2>${surah.name}</h2>
         `;
 
-        data.data.ayahs.forEach((ayah) => {
+        surah.verses.forEach((ayah, index) => {
 
             html += `
-            <div class="ayah">
-
+            <p class="ayah">
                 ${ayah.text}
-
-                <span class="ayah-number">
-                ﴿${ayah.numberInSurah}﴾
-                </span>
-
-            </div>
+                <span class="ayah-number">﴿${index + 1}﴾</span>
+            </p>
             `;
 
         });
@@ -100,8 +66,13 @@ async function openSurah(number) {
 
     } catch (e) {
 
-        surahList.innerHTML =
-        "<h3 style='text-align:center'>❌ حدث خطأ</h3>";
+        surahList.innerHTML = `
+        <h3 style="text-align:center;color:red">
+        حدث خطأ في تحميل السورة
+        </h3>
+        `;
+
+        console.error(e);
 
     }
 
