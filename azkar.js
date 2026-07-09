@@ -20,7 +20,9 @@ menu.innerHTML = `
 <button class="azkar-btn" onclick="showAzkar('أذكار النوم')">😴 أذكار النوم</button>
 
 <button class="azkar-btn" onclick="showAzkar('أذكار بعد الصلاة')">🕌 أذكار بعد الصلاة</button>
+<button class="azkar-btn" onclick="openQuran()">
 📖 القرآن الكريم
+</button>
 <button class="close-btn" onclick="closeMenu()">إغلاق</button>
 
 </div>
