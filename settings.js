@@ -17,16 +17,28 @@ settings.innerHTML = `
 🌙 الوضع الليلي
 </button>
 
+<button class="setting-btn" onclick="toggleNotifications()">
+🔔 إشعارات الصلاة
+</button>
+
+<button class="setting-btn" onclick="toggleAdhan()">
+🔊 صوت الأذان
+</button>
+
 <button class="setting-btn" onclick="changeLanguage()">
 🌍 اللغة
 </button>
 
 <button class="setting-btn" onclick="toggle24Hour()">
-🕒 نظام الوقت
+🕒 نظام 12 / 24 ساعة
 </button>
 
 <button class="setting-btn" onclick="refreshLocation()">
 📍 تحديث الموقع
+</button>
+
+<button class="setting-btn" onclick="changeTheme()">
+🎨 تغيير اللون
 </button>
 
 <button class="setting-btn" onclick="aboutApp()">
@@ -34,7 +46,7 @@ settings.innerHTML = `
 </button>
 
 <button class="close-btn" onclick="closeSettings()">
-إغلاق
+❌ إغلاق
 </button>
 
 </div>
@@ -52,7 +64,10 @@ function closeSettings() {
     settings.style.right = "-350px";
 }
 
+// ==========================
 // الوضع الليلي
+// ==========================
+
 function toggleDarkMode() {
 
     document.body.classList.toggle("dark");
@@ -64,41 +79,81 @@ function toggleDarkMode() {
 
 }
 
-// تحميل الوضع الليلي
 if (localStorage.getItem("darkMode") === "true") {
     document.body.classList.add("dark");
 }
 
-// تغيير اللغة
+// ==========================
+// إشعارات الصلاة
+// ==========================
+
+function toggleNotifications() {
+
+    alert("سيتم إضافة إشعارات الصلاة قريبًا.");
+
+}
+
+// ==========================
+// صوت الأذان
+// ==========================
+
+function toggleAdhan() {
+
+    alert("سيتم إضافة تشغيل وإيقاف الأذان قريبًا.");
+
+}
+
+// ==========================
+// اللغة
+// ==========================
+
 function changeLanguage() {
 
     alert("سيتم إضافة العربية والإنجليزية قريبًا.");
 
 }
 
+// ==========================
 // نظام الوقت
+// ==========================
+
 function toggle24Hour() {
 
-    alert("سيتم إضافة نظام 12 / 24 ساعة قريبًا.");
+    alert("سيتم إضافة نظام 12 و24 ساعة قريبًا.");
 
 }
 
+// ==========================
 // تحديث الموقع
+// ==========================
+
 function refreshLocation() {
 
     location.reload();
 
 }
 
+// ==========================
+// تغيير اللون
+// ==========================
+
+function changeTheme() {
+
+    alert("سيتم إضافة عدة ألوان للتطبيق قريبًا.");
+
+}
+
+// ==========================
 // حول التطبيق
+// ==========================
+
 function aboutApp() {
 
-    alert(
-`Prayer Pro
+    alert(`Prayer Pro
 
 الإصدار 1.0
 
-تم التطوير بواسطة Omar`
-    );
+تم التطوير بواسطة
+Omar Beheiry`);
 
 }
