@@ -75,16 +75,19 @@ settings.innerHTML = `
 document.body.appendChild(settings);
 
 // فتح الإعدادات
-settingsBtn.onclick = () => {
+settingsBtn.addEventListener("click", () => {
     settings.style.right = "0";
-};
+});
 
 // غلق الإعدادات
 function closeSettings() {
     settings.style.right = "-350px";
 }
 
+// ==========================
 // الوضع الليلي
+// ==========================
+
 function toggleDarkMode() {
 
     document.body.classList.toggle("dark");
@@ -96,54 +99,62 @@ function toggleDarkMode() {
 
 }
 
-// تحميل الوضع الليلي
 if (localStorage.getItem("darkMode") === "true") {
     document.body.classList.add("dark");
 }
 
+// ==========================
 // إشعارات الصلاة
+// ==========================
+
 function toggleNotifications() {
-
     alert("سيتم إضافة إشعارات الصلاة قريبًا.");
-
 }
 
+// ==========================
 // صوت الأذان
+// ==========================
+
 function toggleAdhan() {
-
     alert("سيتم إضافة تشغيل وإيقاف صوت الأذان قريبًا.");
-
 }
 
+// ==========================
 // اللغة
+// ==========================
+
 function changeLanguage() {
-
     alert("سيتم إضافة اللغة العربية والإنجليزية قريبًا.");
-
 }
 
+// ==========================
 // نظام الوقت
+// ==========================
+
 function toggle24Hour() {
-
     alert("سيتم إضافة نظام 12 و24 ساعة قريبًا.");
-
 }
 
+// ==========================
 // تحديث الموقع
+// ==========================
+
 function refreshLocation() {
-
     location.reload();
-
 }
 
+// ==========================
 // تغيير اللون
+// ==========================
+
 function changeTheme() {
-
     alert("سيتم إضافة عدة ألوان للتطبيق قريبًا.");
-
 }
 
+// ==========================
 // حول التطبيق
+// ==========================
+
 function aboutApp() {
 
     alert(`Prayer Pro
@@ -155,7 +166,3 @@ function aboutApp() {
 Omar Beheiry`);
 
 }
-
-
-
-
