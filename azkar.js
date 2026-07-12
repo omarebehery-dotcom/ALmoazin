@@ -11,19 +11,31 @@ menu.id = "azkarMenu";
 menu.innerHTML = `
 <div class="menu-content">
 
-<h2>📿 الأذكار</h2>
+<h2>📿 القائمة</h2>
 
-<button class="azkar-btn" onclick="showAzkar('أذكار الصباح')">🌅 أذكار الصباح</button>
-
-<button class="azkar-btn" onclick="showAzkar('أذكار المساء')">🌙 أذكار المساء</button>
-
-<button class="azkar-btn" onclick="showAzkar('أذكار النوم')">😴 أذكار النوم</button>
-
-<button class="azkar-btn" onclick="showAzkar('أذكار بعد الصلاة')">🕌 أذكار بعد الصلاة</button>
-<button class="azkar-btn" onclick="openQuran()">
+<button class="azkar-btn" onclick="openQuran(); closeMenu();">
 📖 القرآن الكريم
 </button>
-<button class="close-btn" onclick="closeMenu()">إغلاق</button>
+
+<button class="azkar-btn" onclick="showAzkar('أذكار الصباح')">
+🌅 أذكار الصباح
+</button>
+
+<button class="azkar-btn" onclick="showAzkar('أذكار المساء')">
+🌙 أذكار المساء
+</button>
+
+<button class="azkar-btn" onclick="showAzkar('أذكار النوم')">
+😴 أذكار النوم
+</button>
+
+<button class="azkar-btn" onclick="showAzkar('أذكار بعد الصلاة')">
+🕌 أذكار بعد الصلاة
+</button>
+
+<button class="close-btn" onclick="closeMenu()">
+❌ إغلاق
+</button>
 
 </div>
 `;
@@ -92,6 +104,7 @@ function showAzkar(type) {
     </div>
     `;
 }
+
 const azkarData = {
 
 "أذكار الصباح":[
