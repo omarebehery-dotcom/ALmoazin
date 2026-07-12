@@ -437,3 +437,10 @@ async function loadQuran() {
 }
 
 
+
+
+
+
+
+
+
