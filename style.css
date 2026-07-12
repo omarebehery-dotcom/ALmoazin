@@ -261,3 +261,16 @@ cursor:pointer;
     background: #1976d2;
     color: white;
 }
+
+/* إخفاء أي عناصر مثبتة أسفل الصفحة */
+body > div:last-child{
+    display:none !important;
+}
+
+#settingsMenu{
+    display:none !important;
+}
+
+#azkarMenu{
+    display:none !important;
+}
