@@ -8,6 +8,18 @@ const settingsBtn = document.getElementById("settingsBtn");
 const settings = document.createElement("div");
 settings.id = "settingsMenu";
 
+// تنسيق القائمة
+settings.style.position = "fixed";
+settings.style.top = "0";
+settings.style.right = "-350px";
+settings.style.width = "320px";
+settings.style.height = "100%";
+settings.style.background = "#0f6b50";
+settings.style.transition = "right .3s ease";
+settings.style.zIndex = "99999";
+settings.style.overflowY = "auto";
+settings.style.boxShadow = "-5px 0 20px rgba(0,0,0,.4)";
+
 settings.innerHTML = `
 <div class="settings-content">
 
@@ -77,7 +89,6 @@ function toggleDarkMode() {
     );
 }
 
-// تحميل الوضع الليلي
 if (localStorage.getItem("darkMode") === "true") {
     document.body.classList.add("dark");
 }
