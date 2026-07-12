@@ -13,26 +13,6 @@ settings.innerHTML = `
 
 <h2>⚙️ الإعدادات</h2>
 
-<button class="setting-btn" onclick="openQuran(); closeSettings();">
-📖 القرآن الكريم
-</button>
-
-<button class="setting-btn" onclick="showAzkar('أذكار الصباح'); closeSettings();">
-🌅 أذكار الصباح
-</button>
-
-<button class="setting-btn" onclick="showAzkar('أذكار المساء'); closeSettings();">
-🌙 أذكار المساء
-</button>
-
-<button class="setting-btn" onclick="showAzkar('أذكار النوم'); closeSettings();">
-😴 أذكار النوم
-</button>
-
-<button class="setting-btn" onclick="showAzkar('أذكار بعد الصلاة'); closeSettings();">
-🕌 أذكار بعد الصلاة
-</button>
-
 <button class="setting-btn" onclick="toggleDarkMode()">
 🌙 الوضع الليلي
 </button>
@@ -89,16 +69,15 @@ function closeSettings() {
 // ==========================
 
 function toggleDarkMode() {
-
     document.body.classList.toggle("dark");
 
     localStorage.setItem(
         "darkMode",
         document.body.classList.contains("dark")
     );
-
 }
 
+// تحميل الوضع الليلي
 if (localStorage.getItem("darkMode") === "true") {
     document.body.classList.add("dark");
 }
@@ -156,7 +135,6 @@ function changeTheme() {
 // ==========================
 
 function aboutApp() {
-
     alert(`Prayer Pro
 
 الإصدار 1.0
@@ -164,5 +142,4 @@ function aboutApp() {
 تم التطوير بواسطة
 
 Omar Beheiry`);
-
 }
