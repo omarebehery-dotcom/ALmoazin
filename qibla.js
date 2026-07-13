@@ -1,34 +1,43 @@
 let currentRotation = 0;
-let qiblaAngle = 135; // زاوية افتراضية (لمصر مثلاً) لحد ما الـ GPS يشتغل
+let targetRotation = 0;
+let qiblaAngle = 135; // زاوية افتراضية لحد ما الـ GPS يشتغل
 
-// 1. تشغيل البوصلة فوراً بناءً على الحساس ومن غير ما تستنى الـ GPS
+// 1. تشغيل الحساس وحساب الزاوية المستهدفة فوراً
 window.addEventListener('deviceorientation', event => {
     const compassHeading = event.webkitCompassHeading || Math.abs(event.alpha - 360);
-    const targetRotation = qiblaAngle - compassHeading;
-    
-    // التنعيم الهادي
+    targetRotation = qiblaAngle - compassHeading;
+});
+
+// 2. دالة التنعيم المستمر (عشان السهم يتحرك براحة وميقفش)
+function animateCompass() {
+    // معادلة التنعيم السحرية
     currentRotation += (targetRotation - currentRotation) * 0.1;
     
     const needleElement = document.querySelector('.needle');
     if (needleElement) {
         needleElement.style.transform = `rotate(${currentRotation}deg)`;
     }
-});
+    
+    // تخلي الأنميشن شغال ورا بعضه بسلاسة
+    requestAnimationFrame(animateCompass);
+}
 
-// 2. تحديث الزاوية بدقة أول ما الـ GPS يلقط الموقع
+// تشغيل الأنميشن فوراً
+animateCompass();
+
+// 3. تحديث القبلة بالـ GPS أول ما يلقط موقعك
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(position => {
         const userLat = position.coords.latitude;
         const userLng = position.coords.longitude;
         
-        // حساب الزاوية الحقيقية لموقعك بالملّي
         qiblaAngle = calculateQibla(userLat, userLng);
     }, error => {
-        console.log("الـ GPS غير مفعّل، شغال على الزاوية الافتراضية");
+        console.log("الـ GPS مش مفعّل، شغالين على الزاوية الافتراضية");
     });
 }
 
-// دالة الحساب الرياضية
+// دالة حساب القبلة الرياضية الصحيحة
 function calculateQibla(lat, lng) {
     const makkahLat = 21.4225 * Math.PI / 180;
     const makkahLng = 39.8262 * Math.PI / 180;
