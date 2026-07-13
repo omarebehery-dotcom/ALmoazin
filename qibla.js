@@ -1,124 +1,104 @@
-// ==========================
-// Prayer Pro - Qibla Compass
-// ==========================
+// إحداثيات الكعبة المشرفة التقريبية
+const MECCA_LAT = 21.4225;
+const MECCA_LNG = 39.8262;
 
-const needle = document.getElementById("needle");
-const qiblaDirection = document.getElementById("qiblaDirection");
+let userLat, userLng;
+let qiblaAngle = 0;
+let isVibrating = false;
 
-// إحداثيات الكعبة
-const KAABA_LAT = 21.4225;
-const KAABA_LON = 39.8262;
-
-// حساب اتجاه القبلة
-function calculateQibla(lat, lon) {
-
-    const φK = KAABA_LAT * Math.PI / 180;
-    const λK = KAABA_LON * Math.PI / 180;
-
-    const φ = lat * Math.PI / 180;
-    const λ = lon * Math.PI / 180;
-
-    const y = Math.sin(λK - λ);
-
-    const x =
-        Math.cos(φ) * Math.tan(φK) -
-        Math.sin(φ) * Math.cos(λK - λ);
-
-    let bearing = Math.atan2(y, x) * 180 / Math.PI;
-
-    return (bearing + 360) % 360;
+// 1. تحديد موقع المستخدم وحساب زاوية القبلة
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(position => {
+        userLat = position.coords.latitude;
+        userLng = position.coords.longitude;
+        
+        qiblaAngle = calculateQiblaAngle(userLat, userLng);
+        const dirText = document.getElementById('qiblaDirection');
+        if (dirText) {
+            dirText.innerText = `اتجاه القبلة: ${Math.round(qiblaAngle)}°`;
+        }
+    }, error => {
+        console.error("خطأ في تحديد الموقع (GPS):", error);
+        const dirText = document.getElementById('qiblaDirection');
+        if (dirText) dirText.innerText = "يرجى تفعيل الموقع (GPS) لحساب القبلة";
+    });
 }
 
-// تشغيل البوصلة
-function startCompass(lat, lon) {
+// الدالة الرياضية لحساب زاوية القبلة
+function calculateQiblaAngle(lat, lng) {
+    const phiK = MECCA_LAT * Math.PI / 180;
+    const lambdaK = MECCA_LNG * Math.PI / 180;
+    const phi = lat * Math.PI / 180;
+    const lambda = lng * Math.PI / 180;
 
-    const qibla = calculateQibla(lat, lon);
+    const y = Math.sin(lambdaK - lambda);
+    const x = Math.cos(phi) * Math.tan(phiK) - Math.sin(phi) * Math.cos(lambdaK - lambda);
+    
+    let angle = Math.atan2(y, x) * 180 / Math.PI;
+    return (angle + 360) % 360;
+}
 
-    qiblaDirection.textContent = "🕋 اتجاه القبلة";
-
-    function startOrientation() {
-
-        window.addEventListener(
-            "deviceorientation",
-            function (event) {
-
-                let heading;
-
-                // أجهزة iPhone
-                if (event.webkitCompassHeading !== undefined) {
-                    heading = event.webkitCompassHeading;
-                }
-                // أجهزة Android
-                else if (event.alpha !== null) {
-                    heading = 360 - event.alpha;
+// 2. طلب صلاحيات المستشعر وتشغيل البوصلة عند اللمس
+function initCompass() {
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+        // هواتف الآيفون (iOS)
+        DeviceOrientationEvent.requestPermission()
+            .then(permissionState => {
+                if (permissionState === 'granted') {
+                    window.addEventListener('deviceorientation', handleOrientation, true);
                 } else {
-                    return;
+                    alert('يجب السماح بالوصول للمستشعرات لتشغيل البوصلة');
                 }
-
-                let angle = (qibla - heading + 360) % 360;
-
-                needle.style.transform =
-                    `translate(-50%, -100%) rotate(${angle}deg)`;
-
-            },
-            true
-        );
-    }
-
-    // دعم iPhone
-    if (
-        typeof DeviceOrientationEvent !== "undefined" &&
-        typeof DeviceOrientationEvent.requestPermission === "function"
-    ) {
-
-        document.body.addEventListener(
-            "click",
-            function () {
-
-                DeviceOrientationEvent.requestPermission()
-                    .then((response) => {
-
-                        if (response === "granted") {
-                            startOrientation();
-                        }
-
-                    })
-                    .catch(console.error);
-
-            },
-            { once: true }
-        );
-
-        qiblaDirection.textContent =
-            "اضغط أي مكان على الشاشة لتشغيل البوصلة";
-
+            }).catch(console.error);
     } else {
-
-        startOrientation();
-
+        // هواتف الأندرويد وباقي المتصفحات
+        window.addEventListener('deviceorientationabsolute', handleOrientation, true);
+        window.addEventListener('deviceorientation', handleOrientation, true);
     }
-
 }
 
-// الحصول على الموقع
-navigator.geolocation.getCurrentPosition(
+// 3. تحريك الإبرة وتشغيل الهزاز عند الاتجاه المظبوط
+function handleOrientation(event) {
+    // قراءة اتجاه الموصلة بشتى الطرق المتاحة في المتصفحات
+    let heading = event.webkitCompassHeading || event.alpha;
+    
+    if (heading !== null && heading !== undefined) {
+        const needle = document.getElementById('needle');
+        if (!needle) return;
 
-    (position) => {
+        // تعديل الحسابات بناء على نوع المستشعر المتاح
+        if (!event.webkitCompassHeading && event.absolute === false) {
+            heading = 360 - heading; 
+        }
 
-        startCompass(
+        // حساب زاوية دوران الإبرة المطلوبة للتوجه للقبلة
+        let totalRotation = qiblaAngle - heading;
+        totalRotation = (totalRotation + 360) % 360;
 
-            position.coords.latitude,
-            position.coords.longitude
+        // تحريك الإبرة بالاعتماد على الـ transform-origin المكتوب في الـ CSS بتاعك
+        needle.style.transform = `translate(-50%, -100%) rotate(${totalRotation}deg)`;
 
-        );
-
-    },
-
-    () => {
-
-        qiblaDirection.textContent =
-            "تعذر تحديد الموقع";
-
+        // التحقق إذا كانت الإبرة تشير للقبلة بالظبط (سماحية 4 درجات يمين أو يسار)
+        if (totalRotation <= 4 || totalRotation >= 356) {
+            // تشغيل الهزاز (Vibration)
+            if (!isVibrating && navigator.vibrate) {
+                navigator.vibrate(200); // هزة مدتها 200 مللي ثانية
+                isVibrating = true; 
+            }
+            // تغيير لون الإبرة للأخضر كدليل بصري إضافي على صحة الاتجاه
+            needle.style.background = 'linear-gradient(to top, #00ff95, #22c98d)';
+        } else {
+            isVibrating = false;
+            // إرجاع لون الإبرة للون الأحمر الأصلي اللي في الـ CSS بتاعك
+            needle.style.background = 'linear-gradient(to top, #ff0000, #ff5555)';
+            if (navigator.vibrate) {
+                navigator.vibrate(0); // إيقاف الهز عند الابتعاد عن القبلة
+            }
+        }
     }
+}
 
-);
+// ربط تشغيل المستشعرات بلمسة المستخدم على سيكشن البوصلة بالكامل
+document.querySelector('.compass-section').addEventListener('click', () => {
+    initCompass();
+});
