@@ -1,27 +1,33 @@
-// 1. نطلب موقع الـ GPS من المستخدم أول ما يفتح أو يضغط على البوصلة
+let currentRotation = 0; // متغير عشان يخزن زاوية السهم الحالية ويحركها براحة
+
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(position => {
         const userLat = position.coords.latitude;
         const userLng = position.coords.longitude;
         
-        // حساب زاوية القبلة بناءً على موقع المستخدم وموقع مكة
+        // حساب زاوية القبلة الثابتة لموقعك
         const qiblaAngle = calculateQibla(userLat, userLng);
         
-        // 2. نربط الزاوية بحركة الحساس (البوصلة)
         window.addEventListener('deviceorientation', event => {
-            // تختلف الحسبة حسب نوع الجهاز (أندرويد أو آيفون)
+            // حساب اتجاه الموبايل
             const compassHeading = event.webkitCompassHeading || Math.abs(event.alpha - 360);
             
-            // الزاوية النهائية الحساسة اللي السهم هيلف بيها
-            const finalDirection = qiblaAngle - compassHeading;
+            // الزاوية المستهدفة اللي السهم المفروض يروحلها
+            const targetRotation = qiblaAngle - compassHeading;
             
-            // هنا بتعمل Rotate لعنصر السهم في الـ CSS
-            document.querySelector('.needle').style.transform = `rotate(${finalDirection}deg)`;
+            // معادلة التنعيم: السهم بيتحرك 10% بس في المرة فبيبان هادي جداً وبراحه
+            currentRotation += (targetRotation - currentRotation) * 0.1;
+            
+            // تحريك السهم في التطبيق
+            const needleElement = document.querySelector('.needle');
+            if (needleElement) {
+                needleElement.style.transform = `rotate(${currentRotation}deg)`;
+            }
         });
     });
 }
 
-// دالة حساب القبلة الرياضية الصحيحة
+// دالة حساب القبلة الرياضية
 function calculateQibla(lat, lng) {
     const makkahLat = 21.4225 * Math.PI / 180;
     const makkahLng = 39.8262 * Math.PI / 180;
