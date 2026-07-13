@@ -26,9 +26,7 @@ function calculateQibla(lat, lon) {
 
     let bearing = Math.atan2(y, x) * 180 / Math.PI;
 
-    bearing = (bearing + 360) % 360;
-
-    return bearing;
+    return (bearing + 360) % 360;
 }
 
 // تشغيل البوصلة
@@ -36,23 +34,28 @@ function startCompass(lat, lon) {
 
     const qibla = calculateQibla(lat, lon);
 
-    qiblaDirection.textContent =
-        "اتجاه القبلة";
+    qiblaDirection.textContent = "🕋 اتجاه القبلة";
 
-    if (window.DeviceOrientationEvent) {
+    function startOrientation() {
 
         window.addEventListener(
             "deviceorientation",
             function (event) {
 
-                const heading =
-                    event.webkitCompassHeading ??
-                    (360 - event.alpha);
+                let heading;
 
-                if (heading == null) return;
+                // أجهزة iPhone
+                if (event.webkitCompassHeading !== undefined) {
+                    heading = event.webkitCompassHeading;
+                }
+                // أجهزة Android
+                else if (event.alpha !== null) {
+                    heading = 360 - event.alpha;
+                } else {
+                    return;
+                }
 
-                const angle =
-                    qibla - heading;
+                let angle = (qibla - heading + 360) % 360;
 
                 needle.style.transform =
                     `translate(-50%, -100%) rotate(${angle}deg)`;
@@ -60,11 +63,38 @@ function startCompass(lat, lon) {
             },
             true
         );
+    }
+
+    // دعم iPhone
+    if (
+        typeof DeviceOrientationEvent !== "undefined" &&
+        typeof DeviceOrientationEvent.requestPermission === "function"
+    ) {
+
+        document.body.addEventListener(
+            "click",
+            function () {
+
+                DeviceOrientationEvent.requestPermission()
+                    .then((response) => {
+
+                        if (response === "granted") {
+                            startOrientation();
+                        }
+
+                    })
+                    .catch(console.error);
+
+            },
+            { once: true }
+        );
+
+        qiblaDirection.textContent =
+            "اضغط أي مكان على الشاشة لتشغيل البوصلة";
 
     } else {
 
-        qiblaDirection.textContent =
-            "البوصلة غير مدعومة";
+        startOrientation();
 
     }
 
@@ -78,7 +108,6 @@ navigator.geolocation.getCurrentPosition(
         startCompass(
 
             position.coords.latitude,
-
             position.coords.longitude
 
         );
@@ -93,8 +122,3 @@ navigator.geolocation.getCurrentPosition(
     }
 
 );
-
-
-
-
-
