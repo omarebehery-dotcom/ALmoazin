@@ -1,33 +1,34 @@
-let currentRotation = 0; // متغير عشان يخزن زاوية السهم الحالية ويحركها براحة
+let currentRotation = 0;
+let qiblaAngle = 135; // زاوية افتراضية (لمصر مثلاً) لحد ما الـ GPS يشتغل
 
+// 1. تشغيل البوصلة فوراً بناءً على الحساس ومن غير ما تستنى الـ GPS
+window.addEventListener('deviceorientation', event => {
+    const compassHeading = event.webkitCompassHeading || Math.abs(event.alpha - 360);
+    const targetRotation = qiblaAngle - compassHeading;
+    
+    // التنعيم الهادي
+    currentRotation += (targetRotation - currentRotation) * 0.1;
+    
+    const needleElement = document.querySelector('.needle');
+    if (needleElement) {
+        needleElement.style.transform = `rotate(${currentRotation}deg)`;
+    }
+});
+
+// 2. تحديث الزاوية بدقة أول ما الـ GPS يلقط الموقع
 if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(position => {
         const userLat = position.coords.latitude;
         const userLng = position.coords.longitude;
         
-        // حساب زاوية القبلة الثابتة لموقعك
-        const qiblaAngle = calculateQibla(userLat, userLng);
-        
-        window.addEventListener('deviceorientation', event => {
-            // حساب اتجاه الموبايل
-            const compassHeading = event.webkitCompassHeading || Math.abs(event.alpha - 360);
-            
-            // الزاوية المستهدفة اللي السهم المفروض يروحلها
-            const targetRotation = qiblaAngle - compassHeading;
-            
-            // معادلة التنعيم: السهم بيتحرك 10% بس في المرة فبيبان هادي جداً وبراحه
-            currentRotation += (targetRotation - currentRotation) * 0.1;
-            
-            // تحريك السهم في التطبيق
-            const needleElement = document.querySelector('.needle');
-            if (needleElement) {
-                needleElement.style.transform = `rotate(${currentRotation}deg)`;
-            }
-        });
+        // حساب الزاوية الحقيقية لموقعك بالملّي
+        qiblaAngle = calculateQibla(userLat, userLng);
+    }, error => {
+        console.log("الـ GPS غير مفعّل، شغال على الزاوية الافتراضية");
     });
 }
 
-// دالة حساب القبلة الرياضية
+// دالة الحساب الرياضية
 function calculateQibla(lat, lng) {
     const makkahLat = 21.4225 * Math.PI / 180;
     const makkahLng = 39.8262 * Math.PI / 180;
