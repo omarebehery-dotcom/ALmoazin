@@ -37,7 +37,6 @@ function loadSurahs() {
     let html = "";
 
     for (let i = 1; i <= 114; i++) {
-        // بنجيب الاسم المظبوط من المصفوفة (بنطرح 1 لأن المصفوفة بتبدأ من الصفر 0)
         const nameOfSurah = surahNames[i - 1]; 
 
         html += `
@@ -51,38 +50,51 @@ function loadSurahs() {
     surahList.innerHTML = html;
 }
 
-// فتح سورة
+// فتح سورة وعرض آياتها بالتشكيل العثماني من الإنترنت مباشرة
 async function openSurah(number) {
+    // رسالة انتظار مريحة للعين أثناء التحميل
+    surahList.innerHTML = `<h3 style="text-align:center; color:#0b7a57; padding:20px;">جاري تحميل آيات السورة الكريمة...</h3>`;
+
     try {
-        const response = await fetch(`surah/surah_${number}.json`);
-        const surah = await response.json();
+        // جلب نص السورة بالكامل بالتشكيل من الـ API
+        const response = await fetch(`https://api.alquran.cloud/v1/surah/${number}`);
+        const data = await response.json();
+        const surah = data.data;
 
         let html = `
         <button class="back-btn" onclick="loadSurahs()">
-            ⬅ رجوع
+            ⬅ رجوع للقائمة
         </button>
 
-        <h2>${surah.name}</h2>
+        <h2 style="text-align:center; color:#0b7a57; margin-bottom:20px; background:none; padding:0; font-weight:bold;">
+            ${surah.name}
+        </h2>
+        
+        <div class="quran-reading-view" style="padding: 5px;">
         `;
 
-        surah.verses.forEach((ayah, index) => {
+        // عرض الآيات بالترتيب والتشكيل العثماني الممتاز
+        surah.ayahs.forEach((ayah) => {
             html += `
             <p class="ayah">
                 ${ayah.text}
-                <span class="ayah-number">﴿${index + 1}﴾</span>
+                <span class="ayah-number">﴿${ayah.numberInSurah}﴾</span>
             </p>
             `;
         });
 
+        html += `</div>`;
+
         surahList.innerHTML = html;
+        surahList.scrollTop = 0; // رفع الاسكرول لأعلى الصفحة
 
     } catch (e) {
         surahList.innerHTML = `
-        <h3 style="text-align:center;color:red">
-            حدث خطأ في تحميل السورة
+        <h3 style="text-align:center; color:red; padding:20px;">
+            حدث خطأ في تحميل السورة. تأكد من اتصالك بالإنترنت وحاول مجدداً.
         </h3>
+        <button class="back-btn" onclick="loadSurahs()">⬅ رجوع</button>
         `;
-
         console.error(e);
     }
 }
