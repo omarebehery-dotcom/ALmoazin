@@ -90,26 +90,23 @@ body{
 }
 
 /* ==================================================
-   تعديل السهم السحري لمنع الرعشة والثبات التام في السنتر
+   تثبيت السهم في السنتر بالظبط ومنعه من السقوط نهائياً
 ================================================== */
 #needle{
-    position:absolute;
-    left:50%;
-    top:50%;
-    width:6px;
-    height:110px;
-    background:linear-gradient(to top,#ff0000,#ff5555);
-    border-radius:20px;
+    position: absolute;
+    bottom: 50%;                 /* كعب السهم يبدأ من خط النص بالظبط */
+    left: calc(50% - 3px);       /* تدوير وتوسيط السهم بالملّي (نصف الـ 6px) */
+    width: 6px;
+    height: 110px;
+    background: linear-gradient(to top,#ff0000,#ff5555);
+    border-radius: 20px;
     
-    /* يثبت كعب السهم في السنتر بالظبط وتلغي الـ translate المتعارضة */
-    transform: translate(-50%, -100%) rotate(0deg);
-    transform-origin: 50% 100%;
+    /* يلف حول كعبه (السنتر) */
+    transform-origin: bottom center; 
     
-    /* إلغاء الـ transition تماماً لمنع الرعشة والاهتزاز */
+    /* إلغاء أي أنميشن خارجي يسبب الرعشة */
     transition: none !important; 
-    
-    /* تنبيه المتصفح لتثبيت الحركة في كارت الشاشة */
-    will-change: transform; 
+    will-change: transform;
     z-index: 5;
 }
 
@@ -183,7 +180,6 @@ body{
 }
 
 @media(max-width:700px){
-
     .compass{
         width:220px;
         height:220px;
@@ -196,6 +192,7 @@ body{
 
     #needle{
         height:90px;
+        left: calc(50% - 3px); /* الحفاظ على توسيط السهم في الموبايل */
     }
 
     .logo{
@@ -209,7 +206,6 @@ body{
 /* ===========================
    قائمة الأذكار
 =========================== */
-
 #azkarMenu{
     position:fixed;
     top:0;
@@ -264,7 +260,6 @@ body{
 /* ===========================
    السبحة الإلكترونية
 =========================== */
-
 .tasbih-section{
     text-align:center;
     margin:20px 0;
