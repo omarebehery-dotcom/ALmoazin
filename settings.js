@@ -1,14 +1,8 @@
-// ==========================
-// Prayer Pro - Settings
-// ==========================
-
 const settingsBtn = document.getElementById("settingsBtn");
 
-// إنشاء نافذة الإعدادات
 const settings = document.createElement("div");
 settings.id = "settingsMenu";
 
-// تنسيق القائمة
 settings.style.position = "fixed";
 settings.style.top = "0";
 settings.style.right = "-350px";
@@ -23,34 +17,30 @@ settings.style.boxShadow = "-5px 0 20px rgba(0,0,0,.4)";
 settings.innerHTML = `
 <div class="settings-content" style="padding:20px;">
 <h2 style="color:white; text-align:center; margin-bottom:25px;">⚙️ الإعدادات</h2>
-
-<button class="setting-btn" onclick="toggleDarkMode()">🌙 الوضع الليلي</button>
-<button class="setting-btn" onclick="toggleNotifications()">🔔 إشعارات الصلاة</button>
-<button class="setting-btn" onclick="toggleAdhan()">🔊 صوت الأذان</button>
-<button class="setting-btn" onclick="changeLanguage()">🌍 اللغة</button>
-<button class="setting-btn" onclick="toggle24Hour()">🕒 نظام 12 / 24 ساعة</button>
-<button class="setting-btn" onclick="refreshLocation()">📍 تحديث الموقع</button>
-<button class="setting-btn" onclick="changeTheme()">🎨 تغيير لون التطبيق</button>
-<button class="setting-btn" onclick="aboutApp()">ℹ️ حول التطبيق</button>
+<button class="azkar-btn" onclick="toggleDarkMode()">🌙 الوضع الليلي</button>
+<button class="azkar-btn" onclick="toggleNotifications()">🔔 إشعارات الصلاة</button>
+<button class="azkar-btn" onclick="toggleAdhan()">🔊 صوت الأذان</button>
+<button class="azkar-btn" onclick="changeLanguage()">🌍 اللغة</button>
+<button class="azkar-btn" onclick="toggle24Hour()">🕒 نظام 12 / 24 ساعة</button>
+<button class="azkar-btn" onclick="refreshLocation()">📍 تحديث الموقع</button>
+<button class="azkar-btn" onclick="changeTheme()">🎨 تغيير لون التطبيق</button>
+<button class="azkar-btn" onclick="aboutApp()">ℹ️ حول التطبيق</button>
 <button class="close-btn" onclick="closeSettings()">❌ إغلاق</button>
 </div>
 `;
 
 document.body.appendChild(settings);
 
-// فتح الإعدادات (مع إضافة كلاس عشان الـ CSS يظهرها)
 settingsBtn.addEventListener("click", () => {
     document.body.classList.add("settings-open");
     settings.style.right = "0";
 });
 
-// غلق الإعدادات (مع إزالة الكلاس عشان الـ CSS يخفيها)
 function closeSettings() {
     document.body.classList.remove("settings-open");
     settings.style.right = "-350px";
 }
 
-// الوظائف (زي ما هي)
 function toggleDarkMode() { document.body.classList.toggle("dark"); localStorage.setItem("darkMode", document.body.classList.contains("dark")); }
 if (localStorage.getItem("darkMode") === "true") { document.body.classList.add("dark"); }
 
