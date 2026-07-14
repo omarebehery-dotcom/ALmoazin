@@ -50,13 +50,13 @@ function loadSurahs() {
     surahList.innerHTML = html;
 }
 
-// فتح سورة وعرض آياتها بالتشكيل العثماني من الإنترنت مباشرة
+// فتح سورة وعرض آياتها بالتشكيل العثماني مباشرة
 async function openSurah(number) {
-    // رسالة انتظار مريحة للعين أثناء التحميل
+    // رسالة تحميل خفيفة لحين جلب البيانات
     surahList.innerHTML = `<h3 style="text-align:center; color:#0b7a57; padding:20px;">جاري تحميل آيات السورة الكريمة...</h3>`;
 
     try {
-        // جلب نص السورة بالكامل بالتشكيل من الـ API
+        // جلب نص السورة بالتشكيل من سيرفر خارجي سريع
         const response = await fetch(`https://api.alquran.cloud/v1/surah/${number}`);
         const data = await response.json();
         const surah = data.data;
@@ -73,7 +73,7 @@ async function openSurah(number) {
         <div class="quran-reading-view" style="padding: 5px;">
         `;
 
-        // عرض الآيات بالترتيب والتشكيل العثماني الممتاز
+        // عرض الآيات آية آية
         surah.ayahs.forEach((ayah) => {
             html += `
             <p class="ayah">
@@ -86,7 +86,7 @@ async function openSurah(number) {
         html += `</div>`;
 
         surahList.innerHTML = html;
-        surahList.scrollTop = 0; // رفع الاسكرول لأعلى الصفحة
+        surahList.scrollTop = 0; // رفع التمرير لأعلى الصفحة
 
     } catch (e) {
         surahList.innerHTML = `
