@@ -46,7 +46,6 @@
     padding:15px;
 }
 
-/* تعديل الكارت عشان يظهر النصوص بوضوح باللون الداكن */
 .surah-item{
     display:flex;
     justify-content:space-between;
@@ -57,17 +56,17 @@
     border-radius:12px;
     cursor:pointer;
     transition:.3s;
-    border: 1px solid #eaeaea; /* تحديد خفيف للكارت */
+    border: 1px solid #eaeaea;
 }
 
-/* إجبار اسم السورة على الظهور باللون الأخضر الداكن المريح للعين */
+/* إظهار أسماء السور باللون الداكن بوضوح */
 .surah-item strong{
     color: #0b3d2e !important;
     font-size: 18px;
     font-weight: 700;
 }
 
-/* إجبار رقم السورة على الظهور بلون رمادي واضح */
+/* أرقام السور */
 .surah-item span{
     color: #4a5568 !important;
     font-size: 16px;
@@ -86,7 +85,7 @@
     border-color: #0b7a57;
 }
 
-/* تعديل لون الآيات في العرض لتكون داكنة وواضحة جداً للقراءة */
+/* نصوص الآيات داكنة ومقروءة بوضوح */
 .ayah{
     background:#fff;
     margin:10px 0;
@@ -96,7 +95,7 @@
     font-size:22px;
     text-align:right;
     box-shadow:0 2px 8px rgba(0,0,0,.08);
-    color: #2d3748 !important; /* لون رمادي داكن مريح للقراءة */
+    color: #2d3748 !important;
 }
 
 .ayah-number{
