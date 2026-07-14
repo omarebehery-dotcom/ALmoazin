@@ -89,6 +89,9 @@ body{
     position:absolute;
 }
 
+/* ==================================================
+   تعديل السهم السحري لمنع الرعشة والثبات التام في السنتر
+================================================== */
 #needle{
     position:absolute;
     left:50%;
@@ -97,10 +100,17 @@ body{
     height:110px;
     background:linear-gradient(to top,#ff0000,#ff5555);
     border-radius:20px;
-    transform:translate(-50%,-100%) rotate(0deg);
-    transform-origin:50% 100%;
-    transition:transform .08s linear;
-    z-index:5;
+    
+    /* يثبت كعب السهم في السنتر بالظبط وتلغي الـ translate المتعارضة */
+    transform: translate(-50%, -100%) rotate(0deg);
+    transform-origin: 50% 100%;
+    
+    /* إلغاء الـ transition تماماً لمنع الرعشة والاهتزاز */
+    transition: none !important; 
+    
+    /* تنبيه المتصفح لتثبيت الحركة في كارت الشاشة */
+    will-change: transform; 
+    z-index: 5;
 }
 
 .center-dot{
