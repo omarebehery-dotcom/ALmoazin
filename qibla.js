@@ -3,7 +3,7 @@ let targetRotation = 0;
 let qiblaAngle = 135; // زاوية افتراضية لحد ما الـ GPS يشتغل
 let compassStarted = false;
 
-// 1. دالة التنعيم المستمر وثبات السهم
+// 1. دالة التنعيم المستمر وثبات السهم وتغيير اللون
 function animateCompass() {
     let diff = targetRotation - currentRotation;
     
@@ -19,8 +19,21 @@ function animateCompass() {
     const needleElement = document.getElementById('needle');
     
     if (needleElement) {
-        // بنحرك السهم بالدوران فقط لأن الـ CSS متكفل بالتثبيت في السنتر
+        // بنحرك السهم بالدوران فقط
         needleElement.style.transform = `rotate(${currentRotation}deg)`;
+        
+        // حساب الزاوية الفعلية الحالية بين السهم والصفر (القبلة)
+        let normalizedAngle = Math.abs((currentRotation % 360 + 360) % 360);
+        if (normalizedAngle > 180) {
+            normalizedAngle = 360 - normalizedAngle;
+        }
+        
+        // لو السهم على القبلة بالظبط (بين 0 و 5 درجات) يقلب أخضر، غير كده يرجع أحمر
+        if (normalizedAngle <= 5) {
+            needleElement.style.background = 'linear-gradient(to top, #00aa44, #00ff95)'; // أخضر مضيء ومميز
+        } else {
+            needleElement.style.background = 'linear-gradient(to top, #ff0000, #ff5555)'; // أحمر
+        }
     }
     
     requestAnimationFrame(animateCompass);
