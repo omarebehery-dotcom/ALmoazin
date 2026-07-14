@@ -1,3 +1,14 @@
+/* إخفاء نافذة الإعدادات تماماً من أسفل الصفحة */
+#settingsMenu {
+    display: none !important;
+}
+
+/* إظهار النافذة فقط عند تفعيلها من الجافا سكريبت */
+body.settings-open #settingsMenu {
+    display: block !important;
+}
+
+/* باقي تصميمك الأصلي */
 *{
     margin:0;
     padding:0;
