@@ -3,26 +3,24 @@ let targetRotation = 0;
 let qiblaAngle = 135; // زاوية افتراضية لحد ما الـ GPS يشتغل
 let compassStarted = false;
 
-// 1. دالة التنعيم المستمر وحركة السهم
+// 1. دالة التنعيم المستمر وثبات السهم
 function animateCompass() {
-    // حساب الفرق بين الزاوية الحالية والمستهدفة بأقصر طريق
     let diff = targetRotation - currentRotation;
     
-    // حل مشكلة الـ 360 درجة (عشان السهم ميتجننش عند نقطة الصفر)
+    // حل مشكلة الـ 360 درجة لعدم حدوث قفزات مفاجئة
     if (diff > 180) diff -= 360;
     if (diff < -180) diff += 360;
 
-    // معدل التنعيم لضمان الثبات والنعومة التامة (0.04)
+    // حركة ناعمة جداً وثابتة (0.04)
     currentRotation += diff * 0.04;
 
     if (isNaN(currentRotation)) currentRotation = 0;
 
-    // مسك السهم بالـ ID المظبوط اللي في الـ HTML بتاعك (#needle)
     const needleElement = document.getElementById('needle');
     
     if (needleElement) {
-        // مهم جداً: الحفاظ على الـ translate (-50%, -100%) ليبقى السهم في المركز ويدور حول كعبه
-        needleElement.style.transform = `translate(-50%, -100%) rotate(${currentRotation}deg)`;
+        // بنحرك السهم بالدوران فقط لأن الـ CSS متكفل بالتثبيت في السنتر
+        needleElement.style.transform = `rotate(${currentRotation}deg)`;
     }
     
     requestAnimationFrame(animateCompass);
@@ -43,13 +41,12 @@ function handleOrientation(event) {
     }
 }
 
-// 3. دالة تشغيل البوصلة فور لمسها
+// 3. دالة تفعيل البوصلة باللمس
 function startCompass() {
-    if (compassStarted) return; // لو اشتغلت خلاص متشتغلش تاني
+    if (compassStarted) return;
     
-    animateCompass(); // ابدأ حركة السهم الناعمة
+    animateCompass();
 
-    // طلب الإذن للآيفون والأجهزة الحديثة
     if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
         DeviceOrientationEvent.requestPermission()
             .then(permissionState => {
@@ -57,12 +54,11 @@ function startCompass() {
                     window.addEventListener('deviceorientation', handleOrientation, true);
                     compassStarted = true;
                 } else {
-                    alert("يا بطل وافق على إذن الحركة عشان السهم يلف معاك");
+                    alert("يا بطل وافق على إذن الحركة لتشغيل البوصلة");
                 }
             })
             .catch(console.error);
     } else {
-        // للأندرويد والأجهزة التانية
         if ('ondeviceorientationabsolute' in window) {
             window.addEventListener('deviceorientationabsolute', handleOrientation, true);
         } else if ('ondeviceorientation' in window) {
@@ -71,7 +67,6 @@ function startCompass() {
         compassStarted = true;
     }
 
-    // تفعيل الـ GPS بدقة لموقعك وتحديث مكان القبلة
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
             const userLat = position.coords.latitude;
@@ -87,9 +82,8 @@ function startCompass() {
     }
 }
 
-// 4. ربط اللمس بالبوصلة والسهم والشاشة
+// 4. ربط اللمس بالبوصلة والشاشة
 document.addEventListener('DOMContentLoaded', () => {
-    // بنمسك ديف البوصلة الكبير اللي عندك في الـ HTML
     const compassContainer = document.querySelector('.compass');
     
     if (compassContainer) {
@@ -97,12 +91,11 @@ document.addEventListener('DOMContentLoaded', () => {
         compassContainer.addEventListener('touchstart', startCompass);
     }
     
-    // أمان إضافي: لو لمس الشاشة في أي مكان تشتغل البوصلة برضه
     document.body.addEventListener('click', startCompass);
     document.body.addEventListener('touchstart', startCompass);
 });
 
-// دالة حساب القبلة الرياضية الصحيحة
+// دالة حساب القبلة
 function calculateQibla(lat, lng) {
     const makkahLat = 21.4225 * Math.PI / 180;
     const makkahLng = 39.8262 * Math.PI / 180;
