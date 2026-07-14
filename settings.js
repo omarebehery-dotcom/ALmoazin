@@ -1,8 +1,9 @@
 const settingsBtn = document.getElementById("settingsBtn");
 
+// إنشاء القائمة وإخفائها فوراً باستخدام display: none
 const settings = document.createElement("div");
 settings.id = "settingsMenu";
-
+settings.style.display = "none"; // القائمة مخفية تماماً
 settings.style.position = "fixed";
 settings.style.top = "0";
 settings.style.right = "-350px";
@@ -31,19 +32,21 @@ settings.innerHTML = `
 
 document.body.appendChild(settings);
 
+// فتح الإعدادات
 settingsBtn.addEventListener("click", () => {
-    document.body.classList.add("settings-open");
-    settings.style.right = "0";
+    settings.style.display = "block"; // بتظهر لما ندوس
+    setTimeout(() => { settings.style.right = "0"; }, 10);
 });
 
+// غلق الإعدادات
 function closeSettings() {
-    document.body.classList.remove("settings-open");
     settings.style.right = "-350px";
+    setTimeout(() => { settings.style.display = "none"; }, 300); // بتختفي بعد ما الانيميشن يخلص
 }
 
+// الوظائف الأساسية
 function toggleDarkMode() { document.body.classList.toggle("dark"); localStorage.setItem("darkMode", document.body.classList.contains("dark")); }
 if (localStorage.getItem("darkMode") === "true") { document.body.classList.add("dark"); }
-
 function toggleNotifications() { alert("سيتم إضافة إشعارات الصلاة قريبًا."); }
 function toggleAdhan() { alert("سيتم إضافة تشغيل وإيقاف صوت الأذان قريبًا."); }
 function changeLanguage() { alert("سيتم إضافة اللغة العربية والإنجليزية قريبًا."); }
