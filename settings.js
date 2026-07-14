@@ -21,136 +21,43 @@ settings.style.overflowY = "auto";
 settings.style.boxShadow = "-5px 0 20px rgba(0,0,0,.4)";
 
 settings.innerHTML = `
-<div class="settings-content">
+<div class="settings-content" style="padding:20px;">
+<h2 style="color:white; text-align:center; margin-bottom:25px;">⚙️ الإعدادات</h2>
 
-<h2>⚙️ الإعدادات</h2>
-
-<button class="setting-btn" onclick="toggleDarkMode()">
-🌙 الوضع الليلي
-</button>
-
-<button class="setting-btn" onclick="toggleNotifications()">
-🔔 إشعارات الصلاة
-</button>
-
-<button class="setting-btn" onclick="toggleAdhan()">
-🔊 صوت الأذان
-</button>
-
-<button class="setting-btn" onclick="changeLanguage()">
-🌍 اللغة
-</button>
-
-<button class="setting-btn" onclick="toggle24Hour()">
-🕒 نظام 12 / 24 ساعة
-</button>
-
-<button class="setting-btn" onclick="refreshLocation()">
-📍 تحديث الموقع
-</button>
-
-<button class="setting-btn" onclick="changeTheme()">
-🎨 تغيير لون التطبيق
-</button>
-
-<button class="setting-btn" onclick="aboutApp()">
-ℹ️ حول التطبيق
-</button>
-
-<button class="close-btn" onclick="closeSettings()">
-❌ إغلاق
-</button>
-
+<button class="setting-btn" onclick="toggleDarkMode()">🌙 الوضع الليلي</button>
+<button class="setting-btn" onclick="toggleNotifications()">🔔 إشعارات الصلاة</button>
+<button class="setting-btn" onclick="toggleAdhan()">🔊 صوت الأذان</button>
+<button class="setting-btn" onclick="changeLanguage()">🌍 اللغة</button>
+<button class="setting-btn" onclick="toggle24Hour()">🕒 نظام 12 / 24 ساعة</button>
+<button class="setting-btn" onclick="refreshLocation()">📍 تحديث الموقع</button>
+<button class="setting-btn" onclick="changeTheme()">🎨 تغيير لون التطبيق</button>
+<button class="setting-btn" onclick="aboutApp()">ℹ️ حول التطبيق</button>
+<button class="close-btn" onclick="closeSettings()">❌ إغلاق</button>
 </div>
 `;
 
 document.body.appendChild(settings);
 
-// فتح الإعدادات
+// فتح الإعدادات (مع إضافة كلاس عشان الـ CSS يظهرها)
 settingsBtn.addEventListener("click", () => {
+    document.body.classList.add("settings-open");
     settings.style.right = "0";
 });
 
-// غلق الإعدادات
+// غلق الإعدادات (مع إزالة الكلاس عشان الـ CSS يخفيها)
 function closeSettings() {
+    document.body.classList.remove("settings-open");
     settings.style.right = "-350px";
 }
 
-// ==========================
-// الوضع الليلي
-// ==========================
+// الوظائف (زي ما هي)
+function toggleDarkMode() { document.body.classList.toggle("dark"); localStorage.setItem("darkMode", document.body.classList.contains("dark")); }
+if (localStorage.getItem("darkMode") === "true") { document.body.classList.add("dark"); }
 
-function toggleDarkMode() {
-    document.body.classList.toggle("dark");
-
-    localStorage.setItem(
-        "darkMode",
-        document.body.classList.contains("dark")
-    );
-}
-
-if (localStorage.getItem("darkMode") === "true") {
-    document.body.classList.add("dark");
-}
-
-// ==========================
-// إشعارات الصلاة
-// ==========================
-
-function toggleNotifications() {
-    alert("سيتم إضافة إشعارات الصلاة قريبًا.");
-}
-
-// ==========================
-// صوت الأذان
-// ==========================
-
-function toggleAdhan() {
-    alert("سيتم إضافة تشغيل وإيقاف صوت الأذان قريبًا.");
-}
-
-// ==========================
-// اللغة
-// ==========================
-
-function changeLanguage() {
-    alert("سيتم إضافة اللغة العربية والإنجليزية قريبًا.");
-}
-
-// ==========================
-// نظام الوقت
-// ==========================
-
-function toggle24Hour() {
-    alert("سيتم إضافة نظام 12 و24 ساعة قريبًا.");
-}
-
-// ==========================
-// تحديث الموقع
-// ==========================
-
-function refreshLocation() {
-    location.reload();
-}
-
-// ==========================
-// تغيير اللون
-// ==========================
-
-function changeTheme() {
-    alert("سيتم إضافة عدة ألوان للتطبيق قريبًا.");
-}
-
-// ==========================
-// حول التطبيق
-// ==========================
-
-function aboutApp() {
-    alert(`Prayer Pro
-
-الإصدار 1.0
-
-تم التطوير بواسطة
-
-Omar Beheiry`);
-}
+function toggleNotifications() { alert("سيتم إضافة إشعارات الصلاة قريبًا."); }
+function toggleAdhan() { alert("سيتم إضافة تشغيل وإيقاف صوت الأذان قريبًا."); }
+function changeLanguage() { alert("سيتم إضافة اللغة العربية والإنجليزية قريبًا."); }
+function toggle24Hour() { alert("سيتم إضافة نظام 12 و24 ساعة قريبًا."); }
+function refreshLocation() { location.reload(); }
+function changeTheme() { alert("سيتم إضافة عدة ألوان للتطبيق قريبًا."); }
+function aboutApp() { alert("Prayer Pro\nالإصدار 1.0\nتم التطوير بواسطة\nOmar Beheiry"); }
