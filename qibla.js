@@ -2,23 +2,36 @@ let currentRotation = 0;
 let targetRotation = 0;
 let qiblaAngle = 135; // زاوية افتراضية لحد ما الـ GPS يشتغل
 
-// 1. تشغيل الحساس وحساب الزاوية المستهدفة فوراً
+// 1. تشغيل الحساس وحساب الاتجاه بحماية كاملة ضد التهنيج
 window.addEventListener('deviceorientation', event => {
-    const compassHeading = event.webkitCompassHeading || Math.abs(event.alpha - 360);
-    targetRotation = qiblaAngle - compassHeading;
-});
+    let compassHeading = null;
 
-// 2. دالة التنعيم المستمر (عشان السهم يتحرك براحة وميقفش)
+    // التأكد إن الجهاز بيبعت بيانات حقيقية ومظبوطة
+    if (event.webkitCompassHeading !== undefined && event.webkitCompassHeading !== null) {
+        compassHeading = event.webkitCompassHeading;
+    } else if (event.alpha !== undefined && event.alpha !== null) {
+        compassHeading = 360 - event.alpha;
+    }
+
+    // لو القراءة سليمة ومفيش فيها أي خطأ، بنحدث الزاوية فوراً
+    if (compassHeading !== null && !isNaN(compassHeading)) {
+        targetRotation = qiblaAngle - compassHeading;
+    }
+}, true);
+
+// 2. دالة التنعيم المستمر (مستحيل تقف)
 function animateCompass() {
-    // معادلة التنعيم السحرية
-    currentRotation += (targetRotation - currentRotation) * 0.1;
-    
-    const needleElement = document.querySelector('.needle');
-    if (needleElement) {
-        needleElement.style.transform = `rotate(${currentRotation}deg)`;
+    // التأكد إن الأرقام سليمة قبل تحريك السهم
+    if (!isNaN(targetRotation) && !isNaN(currentRotation)) {
+        currentRotation += (targetRotation - currentRotation) * 0.1;
+        
+        const needleElement = document.querySelector('.needle');
+        if (needleElement) {
+            needleElement.style.transform = `rotate(${currentRotation}deg)`;
+        }
     }
     
-    // تخلي الأنميشن شغال ورا بعضه بسلاسة
+    // يفضل يحدث الحركة بنعومة بدون توقف
     requestAnimationFrame(animateCompass);
 }
 
