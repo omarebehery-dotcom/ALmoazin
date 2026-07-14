@@ -2,302 +2,183 @@
 <html lang="ar" dir="rtl">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prayer Pro</title>
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  
-<title>Prayer Pro</title>
-
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="quran.css">
-
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-
-<link rel="stylesheet" href="azkar.css">
-
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="quran.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="azkar.css">
 </head>
-
 
 <body>
 
-
-<div class="container">
-
-
-<!-- Header -->
-
-<header class="header">
-
-<button class="icon-btn" id="menuBtn">
-☰
-</button>
-
-
-<h1 class="logo">
-🕌 Prayer Pro
-</h1>
-
-
-<button class="icon-btn" id="settingsBtn">
-⚙️
-</button>
-
-</header>
-
-
-
-
-
-<!-- التاريخ -->
-
-<section class="date-card">
-
-<h2 id="dayName">
-اليوم
-</h2>
-
-
-<p id="gregorianDate">
-جارٍ التحميل...
-</p>
-
-
-<p id="hijriDate">
-جارٍ التحميل...
-</p>
-
-
-</section>
-
-
-
-
-
-<!-- البوصلة -->
-
-<section class="compass-section">
-
-
-<div class="compass">
-
-<div class="compass-ring"></div>
-
-<div id="needle"></div>
-
-<div class="center-dot"></div>
-
-
-</div>
-
-
-<h3 id="qiblaDirection">
-اتجاه القبلة
-</h3>
-
-
-</section>
-
-
-
-
-
-<!-- 📿 السبحة الإلكترونية -->
-
-<section class="tasbih-section">
-
-
-<h2>
-📿 السبحة الإلكترونية
-</h2>
-
-
-<div id="counter">
-0
-</div>
-
-
-<div class="tasbih-buttons">
-
-
-<button onclick="increaseTasbih()">
-+ تسبيح
-</button>
-
-
-<button onclick="resetTasbih()">
-إعادة
-</button>
-
-
-</div>
-
-</section>
-
-
-
-
-
-<!-- الصلاة القادمة -->
-
-<section class="next-prayer">
-
-
-<h2>
-الصلاة القادمة
-</h2>
-
-
-<h1 id="nextPrayer">
-جارٍ التحميل...
-</h1>
-
-
-<h2 id="countdown">
-00:00:00
-</h2>
-
-
-</section>
-
-
-
-
-
-<!-- مواقيت الصلاة -->
-
-<section class="times">
-
-
-<div class="time-card">
-
-<span>
-الفجر
-</span>
-
-<strong id="fajr">
---:--
-</strong>
-
-</div>
-
-
-<div class="time-card">
-
-<span>
-الشروق
-</span>
-
-<strong id="sunrise">
---:--
-</strong>
-
-</div>
-
-
-<div class="time-card">
-
-<span>
-الظهر
-</span>
-
-<strong id="dhuhr">
---:--
-</strong>
-
-</div>
-
-
-<div class="time-card">
-
-<span>
-العصر
-</span>
-
-<strong id="asr">
---:--
-</strong>
-
-</div>
-
-
-<div class="time-card">
-
-<span>
-المغرب
-</span>
-
-<strong id="maghrib">
---:--
-</strong>
-
-</div>
-
-
-<div class="time-card">
-
-<span>
-العشاء
-</span>
-
-<strong id="isha">
---:--
-</strong>
-
-</div>
-
-
-</section>
-
-
-
-
-
-<!-- الموقع -->
-
-<footer class="footer">
-
-
-<p id="cityName">
-
-📍 جاري تحديد الموقع...
-
-</p>
-
-
-</footer>
-
-
-</div>
-
-<!-- نافذة القرآن الكريم -->
-
-<div id="quranModal" class="quran-modal">
-
-    <div class="quran-content">
-
-        <span class="close" onclick="closeQuran()">✖</span>
-
-        <h2>📖 القرآن الكريم</h2>
-
-        <div id="surahList">
-            جاري تحميل السور...
-        </div>
+    <div class="container">
+
+        <!-- Header -->
+        <header class="header">
+            <!-- عند الضغط عليه يفتح الأذكار -->
+            <button class="icon-btn" id="menuBtn" onclick="openAzkar()">
+                ☰ الأذكار
+            </button>
+
+            <h1 class="logo">
+                🕌 Prayer Pro
+            </h1>
+
+            <!-- عند الضغط عليه يفتح الإعدادات -->
+            <button class="icon-btn" id="settingsBtn" onclick="openSettings()">
+                ⚙️
+            </button>
+        </header>
+
+        <!-- التاريخ -->
+        <section class="date-card">
+            <h2 id="dayName">اليوم</h2>
+            <p id="gregorianDate">جارٍ التحميل...</p>
+            <p id="hijriDate">جارٍ التحميل...</p>
+        </section>
+
+        <!-- البوصلة -->
+        <section class="compass-section">
+            <div class="compass">
+                <div class="compass-ring"></div>
+                <div id="needle"></div>
+                <div class="center-dot"></div>
+            </div>
+            <h3 id="qiblaDirection">اتجاه القبلة</h3>
+        </section>
+
+        <!-- 📿 السبحة الإلكترونية -->
+        <section class="tasbih-section">
+            <h2>📿 السبحة الإلكترونية</h2>
+            <div id="counter">0</div>
+            <div class="tasbih-buttons">
+                <button onclick="increaseTasbih()">+ تسبيح</button>
+                <button onclick="resetTasbih()">إعادة</button>
+            </div>
+        </section>
+
+        <!-- الصلاة القادمة -->
+        <section class="next-prayer">
+            <h2>الصلاة القادمة</h2>
+            <h1 id="nextPrayer">جارٍ التحميل...</h1>
+            <h2 id="countdown">00:00:00</h2>
+        </section>
+
+        <!-- مواقيت الصلاة -->
+        <section class="times">
+            <div class="time-card">
+                <span>الفجر</span>
+                <strong id="fajr">--:--</strong>
+            </div>
+            <div class="time-card">
+                <span>الشروق</span>
+                <strong id="sunrise">--:--</strong>
+            </div>
+            <div class="time-card">
+                <span>الظهر</span>
+                <strong id="dhuhr">--:--</strong>
+            </div>
+            <div class="time-card">
+                <span>العصر</span>
+                <strong id="asr">--:--</strong>
+            </div>
+            <div class="time-card">
+                <span>المغرب</span>
+                <strong id="maghrib">--:--</strong>
+            </div>
+            <div class="time-card">
+                <span>العشاء</span>
+                <strong id="isha">--:--</strong>
+            </div>
+        </section>
+
+        <!-- الموقع -->
+        <footer class="footer">
+            <p id="cityName">📍 جاري تحديد الموقع...</p>
+        </footer>
 
     </div>
 
-</div>
+    <!-- ========================================== -->
+    <!-- 1. نافذة القرآن الكريم (Quran Modal) -->
+    <!-- ========================================== -->
+    <div id="quranModal" class="quran-modal">
+        <div class="quran-content">
+            <span class="close" onclick="closeQuran()">✖</span>
+            <h2>📖 القرآن الكريم</h2>
+            <div id="surahList">
+                جاري تحميل السور...
+            </div>
+        </div>
+    </div>
 
-<script src="app.js"></script>
-<script src="azkar.js"></script>
-<script src="qibla.js"></script>
-<script src="settings.js"></script>
-<script src="quran.js"></script>
+    <!-- ========================================== -->
+    <!-- 2. نافذة الإعدادات (Settings Modal) - بالتنسيق الجديد -->
+    <!-- ========================================== -->
+    <div id="settingsModal" class="settings-modal">
+        <div class="settings-content">
+            <span class="close" onclick="closeSettings()">&times;</span>
+            <h2>⚙️ الإعدادات</h2>
+            <div class="settings-list">
+                <button onclick="toggleDarkMode()">
+                    <span>الوضع الليلي</span>
+                    <span>🌙</span>
+                </button>
+                <button onclick="toggleNotifications()">
+                    <span>إشعارات الصلاة</span>
+                    <span>🔔</span>
+                </button>
+                <button onclick="changeAthanSound()">
+                    <span>صوت الأذان</span>
+                    <span>📣</span>
+                </button>
+                <button onclick="changeLanguage()">
+                    <span>اللغة</span>
+                    <span>🌐</span>
+                </button>
+                <button onclick="toggleTimeFormat()">
+                    <span>نظام 12 / 24 ساعة</span>
+                    <span>🕒</span>
+                </button>
+                <button onclick="updateLocation()">
+                    <span>تحديث الموقع</span>
+                    <span>📍</span>
+                </button>
+                <button onclick="changeAppColor()">
+                    <span>تغيير لون التطبيق</span>
+                    <span>🎨</span>
+                </button>
+                <button onclick="aboutApp()">
+                    <span>حول التطبيق</span>
+                    <span>ℹ️</span>
+                </button>
+            </div>
+            <button onclick="closeSettings()" class="close-btn">إغلاق ❌</button>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 3. نافذة الأذكار (Azkar Modal) -->
+    <!-- ========================================== -->
+    <div id="azkarModal" class="azkar-modal" style="display:none;">
+        <div class="azkar-content">
+            <span class="close" onclick="closeAzkar()">&times;</span>
+            <h2>📿 الأذكار اليومية</h2>
+            <div id="azkarList">
+                جاري تحميل الأذكار...
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+    <script src="azkar.js"></script>
+    <script src="qibla.js"></script>
+    <script src="settings.js"></script>
+    <script src="quran.js"></script>
 
 </body>
 </html>
-
-
-
-
-
